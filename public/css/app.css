@@ -1,37 +1,41 @@
-
-
-
-/* #taula {
+/*
+  #taula {
     height: 359px !important;
     overflow: auto;
     width: 600px;
 }
 
-/* @media screen and (max-width: 600px) {
+@media screen and (max-width: 600px) {
     table {
-        width:100%;
+        width: 100%;
     }
+
     thead {
         display: none;
     }
+
     tr:nth-of-type(2n) {
         background-color: inherit;
     }
+
     tr td:first-child {
         background: #f0f0f0;
-        font-weight:bold;
-        font-size:1.3em;
+        font-weight: bold;
+        font-size: 1.3em;
     }
+
     tbody td {
         display: block;
-        text-align:center;
+        text-align: center;
     }
+
     tbody td:before {
         content: attr(data-th);
         display: block;
-        text-align:center;
+        text-align: center;
     }
-} */
+}
+*/
 
 @media screen and (max-width: 320px) {
     table {
@@ -84,6 +88,37 @@
     margin-left: 0px;
     /* margin para la parte izquierda del card */
 }
+
+/*Esta seecion es para el border del encabezado de la vista donde aparecen las graficas*/
+.card-header {
+    display: flex;
+    height: 1%;
+    align-items: center;
+    justify-content: center;
+
+}
+
+/*Se pone al 100 porciento el cuerpo del card donde estan alojados las graficas, pra despues dividirlo en dos */
+.card-body {
+    height: 100%;
+}
+
+/* Se divide el cuerpo del card para mostrar ambas graficas y sea resposive para cualquier pantalla */
+.contenedor {
+    height: 49%;
+    background-color: #ffffff;
+    margin: 0% 0%;
+}
+
+
+
+ul,
+li {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+
 
 #seleccionGraficas {
     display: flex;
@@ -157,4 +192,99 @@ table tr th {
 
 .desc:after {
     content: " ↓";
+}
+
+/*Estilo para tabla del index (buscador) */
+* {
+    /* Change your font family */
+    font-family: sans-serif;
+}
+
+.content-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9em;
+
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table thead tr {
+    background-color: #071476;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+.content-table th,
+.content-table td {
+    padding: 12px 15px;
+}
+
+.content-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+    border-bottom: 2px solid #071476;
+}
+
+.content-table tbody tr.active-row {
+    font-weight: bold;
+    color: #071476;
+}
+
+
+
+/* Estilo para bottom CSS */
+
+
+.button-29 {
+  align-items: center;
+  appearance: none;
+  background-image: radial-gradient(100% 100% at 100% 0, #237186 0, #071476 100%);
+  border: 0;
+  border-radius: 6px;
+  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "JetBrains Mono",monospace;
+  height: 35px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  transition: box-shadow .15s,transform .15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow,transform;
+  font-size: 18px;
+}
+
+.button-29:focus {
+  box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #1f2654 0 -3px 0 inset;
+}
+
+.button-29:hover {
+  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.button-29:active {
+  box-shadow: #3c4fe0 0 3px 7px inset;
+  transform: translateY(2px);
 }

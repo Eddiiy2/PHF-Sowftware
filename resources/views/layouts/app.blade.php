@@ -38,38 +38,8 @@
                         <span class="align-middle">PHF SOFTWARE</span>
                     </a>
 
-                    <ul class="sidebar-nav">
-                        <li class="sidebar-header">
-                            Principal
-                        </li>
-
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="/graficas">
-                                <i class="fa fa-area-chart"></i> <span class="align-middle">JARABE
-                                    TERMINADO</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="">
-                                <i class="fa fa-area-chart"></i> <span class="align-middle">CLARIFICADO</span>
-                            </a>
-                        </li>
-
-
-
-                        {{--  <li class="sidebar-header">
-                            Tools & Components
-                        </li>
-
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="ui-buttons.html">
-                                <i class="align-middle" data-feather="square"></i> <span
-                                    class="align-middle">Buttons</span>
-                            </a>
-                        </li>  --}}
-
-
+                    <ul class="nav-links" id="titulos-navegacion">
+                        {{--  Aqui se pondran automaticamente los titulos de las areas mediante js  --}}
                     </ul>
 
                 </div>
@@ -86,5 +56,121 @@
         </div>
     </body>
 </body>
+
+
+{{--  Ingresando los titulos y subtitulos de los cips obtenidos desde la base de datos por medio de ajax/fetch --}}
+<script>
+    $(document).ready(function() {
+        var titulos_nav = document.getElementById("titulos-navegacion");
+
+        fetch('/obtenerdivs')
+            .then(response => response.json())
+            .then(respuesta => {
+
+                addtitulos(respuesta)
+            });
+
+
+        function addtitulos(respuesta) {
+            let titulojson = respuesta;
+
+
+            for (var i = 0; i < respuesta.length; i++) {
+                titulos_nav.innerHTML += `
+                <br><br>
+                {{--  Primero div  --}}
+                <li id='li-${ i+1 }' style="display:block;">
+                    <div class="iocn-link">
+                        <a>
+                            <i id="iconos" class="fas fa-chart-area"></i>
+                            <span class="link_name" id="titulos"> ${ respuesta[i].titulo } </span>
+                        </a>
+                        <span class="btn arrow" id="despliegue">▼</span>
+                    </div>
+                    <ul class="sub-menu" id="area${ i+1 }">
+                        <li><a class="link_name"> ${ respuesta[i].titulo } </a></li>
+                        <br>
+                        {{--  <li><a href="/principal/Todos">► Todos </a></li>;  --}}
+                        {{--  div para poner los cips desde la base de datos  --}}
+                    </ul>
+                </li>
+                `;
+
+                let n = i + 1;
+
+                fetch('/nomcips/' + (i + 1))
+                    .then(response => response.json())
+                    .then(res => {
+                        {{--  Agregando los valores al navbar  --}}
+                        var menus = document.getElementById("area" + n);
+                        for (let valor of res) {
+                            const nom = valor.nombre;
+
+                            menus.innerHTML +=
+                                `<li><a href="/principal/${ valor.nombre }_area${ n }_${ titulojson[n-1].titulo }">►    ${ valor.nombre } </a></li>`;
+                        }
+                    });
+
+            }
+
+            titulos_nav.innerHTML += `
+                <br><br>
+                    <li>
+                        <a>
+                            <i class='fa fa-cog' id="iconos"></i>
+                            <span class="link_name" id="titulos">Configuraciones</span>
+                        </a>
+                        <ul class="sub-menu blank">
+                            <li><a class="link_name" href="#">Configuraciones</a></li>
+                        </ul>
+                    </li>
+                `;
+
+
+            let arrow = document.querySelectorAll(".arrow");
+            for (var i = 0; i < arrow.length; i++) {
+                arrow[i].addEventListener("click", (e) => {
+                    let arrowParent = e.target.parentElement
+                        .parentElement; //selecting main parent of arrow
+                    arrowParent.classList.toggle("showMenu");
+                    verificar();
+                });
+            }
+
+            function verificar() {
+                var btn = document.getElementById("despliegue");
+                if ($('#sub-menu').css('display') === 'block') {
+                    btn.textContent = "▲";
+                } else {
+                    btn.textContent = "▼";
+                }
+            }
+
+        }
+
+    });
+</script>
+
+{{--  <script>
+    let arrow = document.querySelectorAll(".arrow");
+    for (var i = 0; i < arrow.length; i++) {
+        arrow[i].addEventListener("click", (e) => {
+            let arrowParent = e.target.parentElement.parentElement; //selecting main parent of arrow
+            arrowParent.classList.toggle("showMenu");
+            verificar();
+        });
+    }
+
+    function verificar() {
+        var btn = document.getElementById("despliegue");
+        if ($('#sub-menu').css('display') === 'block') {
+            btn.textContent = "▲";
+        } else {
+            btn.textContent = "▼";
+        }
+    };
+</script> --}}
+
+
 
 </html>
