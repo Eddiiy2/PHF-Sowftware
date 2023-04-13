@@ -34,16 +34,24 @@ Route::get('/descargar', [TablaController::class, 'descargar']);
 // Route::get('graficacion', [UnoCipController::class, 'index']);
 // Route::get('old_graficacion', [Uno20200424CipController::class, 'index'])->name('home');
 //Route::get('graficas', [TablaController::class, 'index']);
-Route::get('/buscar/{dbtabla}', [TablaController::class, 'buscar']); //Ruta para la peticion ajax para la graficacion
+Route::get('/buscar/{dbtabla}', [TablaController::class, 'buscar'])->name('prueba'); //Ruta para la peticion ajax para la graficacion
 Route::resource('graficas', TablaController::class); // Rutas definidas para graficacion
 Route::get('/nomcips/{n}', [TablaController::class, 'nomcips']); //Ruta para la peticion de los nombre de cips a la bd para ingresarlos en el navbar de primera instancia
 
+
+//INGRESANDO RUTA PARA SOLO CLIENTE
+Route::get('/pasar', [EntradaController::class, 'ingresar_cliente'])->name('pasar');
 
 // Rutas para el login, el validado de usuarios y la salida de usuarios
 Route::get('/login', [EntradaController::class, 'login'])->name('entrada');
 Route::post('/validar', [EntradaController::class, 'validar'])->name('validar');
 Route::get('/salir', [EntradaController::class, 'salir'])->name('salir');
 
-Route::get('/bienvenida', [TablaController::class, 'bienvenida']); // Vista para la entrada del programa (Bienvenida)
+//Route::get('/bienvenida', [TablaController::class, 'bienvenida']); // Vista para la entrada del programa (Bienvenida)
 Route::get('/principal/{nom}', [TablaController::class, 'principal']); // Metodo para obtener los nom de los cips mediante ajax
 Route::get('/obtenerdivs', [TablaController::class, 'obtenerdivs']); // Ruta para el metodo donde retorna la cantidad de divs a mostrar en el navbar mediante peticion ajax
+
+
+// PROBANDO RUTAS PARA ENTRAR COMO CLIENTE SIN LOGUE
+
+Route::get('/', [EntradaController::class, 'como_cliente']);

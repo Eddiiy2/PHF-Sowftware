@@ -116,12 +116,12 @@
             titulos_nav.innerHTML += `
                 <br><br>
                     <li>
-                        <a>
+                        <a href="/login">
                             <i class='fa fa-cog' id="iconos"></i>
                             <span class="link_name" id="titulos">Configuraciones</span>
                         </a>
                         <ul class="sub-menu blank">
-                            <li><a class="link_name" href="#">Configuraciones</a></li>
+                            <li><a class="link_name" >Configuraciones</a></li>
                         </ul>
                     </li>
                 `;

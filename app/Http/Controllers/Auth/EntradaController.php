@@ -15,6 +15,16 @@ class EntradaController extends Controller
     {
         return view('auth.login');
     }
+    public function como_cliente(){
+
+        return view('welcome');
+
+    }
+
+    public function ingresar_cliente(){
+        return view('layouts.app');
+    }
+
 
     public function validar(Request $request)
     {
@@ -39,7 +49,7 @@ class EntradaController extends Controller
                 else
                     //return "es cliente";
                     //return redirect(route('cliente'));
-                    return redirect('/bienvenida');
+                    return redirect('/welcome');
             } else {
                 //return "LA CLAVE ES INCORRECTA";
                 return redirect()->back();

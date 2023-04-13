@@ -28,5 +28,10 @@ class AuthServiceProvider extends ServiceProvider
 
             return $usuario->role()->first()->nombre == 'administrador';
         });
+
+        Gate::define('EsCliente', function($usuario){
+
+            return $usuario->role()->first()->nombre_rol == 'cliente';
+        });
     }
 }

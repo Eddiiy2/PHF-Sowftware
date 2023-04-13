@@ -30,14 +30,11 @@ class TablaController extends Controller
         $pdf = PDF::loadView('pdf.template', compact('data1', 'data2'));
         return $pdf->download('mi-archivo.pdf');
 
-        
+
 
     }
 
-    public function bienvenida()
-    {
-        return view('welcome');
-    }
+  
 
     public function principal($nom)
     {
