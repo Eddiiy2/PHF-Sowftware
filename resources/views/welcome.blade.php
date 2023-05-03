@@ -11,11 +11,6 @@
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
-    <!-- Core theme CSS (includes Bootstrap)-->
-
 
     <script src="build/assets/scripts.js"></script>
     <link href="build/assets/bienvenidad.css" rel="stylesheet">
@@ -54,20 +49,21 @@
     </nav>
     <!-- Masthead-->
     <header class="masthead">
+
         <div class="container">
             <h1 class="masthead-heading text-uppercase fw-bold text-primary mb-4 "
                 style="font-family:courier,arial,helvética;">PHF <span class="text-white"
                     style="font-family:courier,arial,helvética; text-align: justify">SOFTWARE I4.0 V20.23</span></h1>
             <h1 class="masthead-subheading  text-uppercase "
                 style="font-family:courier,arial,helvética; text-align: right; width: 90% ; "><span class="text-white"
-                    style="font-family:courier,arial,helvética;">The best process history file
+                    style="font-family:courier,arial,helvética;">Process history file
                 </span></h1>
             <h1 class="masthead-subheading  text-uppercase "
                 style="font-family:courier,arial,helvética; text-align: right;width: 90% ;"><span class="text-white"
                     style="font-family:courier,arial,helvética;">all in one </span></h1>
             <div class="masthead-otro  text-uppercase"
                 style="font-family:courier,arial,helvética; font-weight: bolder; "></div>
-            <a class="btn btn-primary btn-xl text-uppercase" href="/pasar"> Ingresar</a>
+            <a class="btn btn-primary btn-lg text-uppercase"  href="/pasar"> Ingresar</a>
 
         </div>
 
@@ -358,7 +354,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a href="#">AIM INGENIERIA</a>, Derecho reservados.
+                        &copy; <a href="#">AIM INGENIERIA</a>, Derechos reservados.
                     </div>
 
                 </div>
@@ -601,13 +597,9 @@
     </div>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="js/scripts.js"></script>
-    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-    <!-- * *                               SB Forms JS                               * *-->
-    <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
-    <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
+
+
 </body>
 
 </html>
