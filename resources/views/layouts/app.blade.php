@@ -34,9 +34,14 @@
         <div class="wrapper">
             <nav id="sidebar" class="sidebar js-sidebar">
                 <div class="sidebar-content js-simplebar">
-                    <a class="sidebar-brand" href="index.html">
-                        <span class="align-middle">PHF SOFTWARE</span>
-                    </a>
+                    <div class="sidebar-brand">
+                        <span class="align-middle" style="font-style: italic;">PHF SOFTWARE</span>
+                        <br>
+                        <div style="text-align: right; margin-right:25px; font-size: 1.0rem;font-weight: 50;">
+                            <span style="font-style: italic;">I4.0 V20.23</span>
+                        </div>
+
+                    </div>
 
                     <ul class="nav-links" id="titulos-navegacion">
                         {{--  Aqui se pondran automaticamente los titulos de las areas mediante js  --}}
@@ -113,7 +118,7 @@
 
             }
 
-            titulos_nav.innerHTML += `
+            {{--  titulos_nav.innerHTML += `
                 <br><br>
                     <li>
                         <a>
@@ -124,7 +129,7 @@
                             <li><a class="link_name" href="#">Configuraciones</a></li>
                         </ul>
                     </li>
-                `;
+                `;  --}}
 
 
             let arrow = document.querySelectorAll(".arrow");

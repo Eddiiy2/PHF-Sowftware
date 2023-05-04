@@ -19,6 +19,10 @@
         "c3": "^0.4.24",
         "feather-icons": "^4.29.0",
         "html2canvas": "^1.4.1",
+        "html2pdf": "^0.0.11",
+        "html2pdf.js": "^0.10.1",
+        "moment": "^2.29.4",
+        "print-js": "^1.6.0",
         "resize-observer-polyfill": "^1.5.1",
         "simplebar": "^6.2.4",
         "vue": "^2.7.14"

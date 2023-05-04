@@ -101,6 +101,7 @@
 /*Se pone al 100 porciento el cuerpo del card donde estan alojados las graficas, pra despues dividirlo en dos */
 .card-body {
     height: 100%;
+    width: 100%;
 }
 
 /* Se divide el cuerpo del card para mostrar ambas graficas y sea resposive para cualquier pantalla */
@@ -110,6 +111,12 @@
     margin: 0% 0%;
 }
 
+
+.contenedor_individual {
+    height: 100%;
+    background-color: #ffffff;
+    margin: 0px auto;
+}
 
 
 ul,
@@ -245,46 +252,274 @@ table tr th {
 
 
 .button-29 {
-  align-items: center;
-  appearance: none;
-  background-image: radial-gradient(100% 100% at 100% 0, #237186 0, #071476 100%);
-  border: 0;
-  border-radius: 6px;
-  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: "JetBrains Mono",monospace;
-  height: 35px;
-  justify-content: center;
-  line-height: 1;
-  list-style: none;
-  overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
-  position: relative;
-  text-align: left;
-  text-decoration: none;
-  transition: box-shadow .15s,transform .15s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-  will-change: box-shadow,transform;
-  font-size: 18px;
+    align-items: center;
+    appearance: none;
+    background-image: radial-gradient(100% 100% at 100% 0, #237186 0, #071476 100%);
+    border: 0;
+    border-radius: 6px;
+    box-shadow: rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, rgba(58, 65, 111, .5) 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono", monospace;
+    height: 35px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s, transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow, transform;
+    font-size: 12px;
 }
 
 .button-29:focus {
-  box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #1f2654 0 -3px 0 inset;
+    box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #1f2654 0 -3px 0 inset;
 }
 
 .button-29:hover {
-  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
-  transform: translateY(-2px);
+    box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+    transform: translateY(-2px);
 }
 
 .button-29:active {
-  box-shadow: #3c4fe0 0 3px 7px inset;
-  transform: translateY(2px);
+    box-shadow: #3c4fe0 0 3px 7px inset;
+    transform: translateY(2px);
+}
+
+
+/* Para boton de graficar CONSULTAR */
+
+.button-consultar {
+    width: 40%;
+    margin: 0% 2%;
+    appearance: none;
+    background-color: #071476;
+    border: 2px solid #071476;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 13px;
+    font-weight: 600;
+    line-height: normal;
+    min-height: 30px;
+    min-width: 0;
+    outline: none;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    will-change: transform;
+}
+
+.button-consultar:disabled {
+    pointer-events: none;
+}
+
+.button-consultar:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
+
+.button-consultar:active {
+    box-shadow: none;
+    transform: translateY(0);
+}
+
+
+/* Para boton de graficar en vivo */
+
+.button-85 {
+    width: 45%;
+    margin: 0% 2%;
+
+
+    font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 13px;
+    font-weight: 600;
+    line-height: normal;
+    min-height: 30px;
+    min-width: 0;
+    outline: none;
+    padding: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+
+
+    border: none;
+    outline: none;
+    color: rgb(255, 255, 255);
+    background: #071476;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.button-85:before {
+    content: "";
+    background: linear-gradient(45deg,
+            #26ff00,
+            #ffffff,
+            #26ff00,
+            #ffffff);
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing-button-85 20s linear infinite;
+    transition: opacity 0.3s ease-in-out;
+    border-radius: 10px;
+}
+
+@keyframes glowing-button-85 {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 400% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.button-85:after {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #071476;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+}
+
+
+.button-85:disabled {
+    pointer-events: none;
+}
+
+.button-85:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+}
+
+.button-85:active {
+    box-shadow: none;
+    transform: translateY(0);
+}
+
+
+
+
+/*
+@media print and (width: 21cm) and (height: 29.7cm) {
+    @page {
+        margin: 2cm;
+    }
+}
+
+@media print and (width: 8.5in) and (height: 11in) {
+    @page {
+        margin: 2in;
+    }
+}
+
+@page {
+    size: A4 landscape;
+    margin: 2%;
+}
+
+
+@media print {
+
+    #chart_agua {
+        display: none;
+    }
+}
+*/
+
+
+
+@media print and (width: 21cm) and (height: 29.7cm) {
+    @page {
+        margin: 5mm;
+        size: A4 landscape;
+    }
+
+    body {
+        margin: 0mm;
+        width: 580mm;
+        height: 60mm
+    }
+
+}
+
+@media print and (width: 8.5in) and (height: 11in) {
+    @page {
+        margin: 5mm;
+        size: A4 landscape;
+    }
+
+    body {
+        margin: 0mm;
+        width: 580mm;
+        height: 60mm
+    }
+
+}
+
+
+
+
+
+
+
+
+
+@page {
+    margin: 5mm;
+    size: A3 landscape;
+    /* size: 380mm 200mm;  */
+}
+
+@media print {
+    body {
+        width: 580mm;
+        height: 380mm;
+        display: flex;
+        justify-content: center;
+        margin: auto;
+        padding-top: 100PX;
+        padding-bottom: 100PX;
+
+
+    }
 }

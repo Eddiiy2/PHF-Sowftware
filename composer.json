@@ -13,6 +13,7 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
+        "mpdf/mpdf": "^6.1",
         "tightenco/ziggy": "^1.5",
         "twbs/bootstrap-icons": "^1.10"
     },

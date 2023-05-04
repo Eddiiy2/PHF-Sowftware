@@ -1,11 +1,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title> PHF SOFTWARE </title>
+    <title id="titulopagina"> PHF SOFTWARE </title>
 
     <link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/c3.css') }}">
     <link rel="stylesheet" href="{{ asset('css/all.css') }}">
+    {{--  <link rel="stylesheet" href="{{ asset('css/boostrap502.css') }}">  --}}
+
 
     {{--  Importando js de C3 para las graficas y Ajax para la consulta de la tabla index  --}}
     <script src="{{ URL::asset('js/c3.js') }}"></script>
@@ -14,20 +16,17 @@
     <script src="{{ URL::asset('js/ajax.js') }}"></script>
     <script src="{{ URL::asset('js/all.js') }}"></script>
 
-    <script src="{{ URL::asset('js/imprimir.js') }}"></script>
-
-    {{--  <script src="{{ URL::asset('js/html2canvas.js') }}"></script>
-    <script src="{{ URL::asset('js/html2canvas.min.js') }}"></script>  --}}
 
     {{--  -----------------------------------------------------------------------  --}}
 
 
     <div class="row mt-1" style="width:100%; height:100%;" id="photo">
+
         {{--  col-12 para vista en celular
             col-lg-6 Para vista en tablet
             col-xxl-3 para vista en pc  --}}
 
-        <div class="col-0 col-lg-2 col-xxl-2 d-flex">
+        <div class="col-3 col-lg-2 col-xxl-2 d-flex">
             <div class="card flex-fill w-100">
                 <div class="card-header bg-dark bg-gradient text-light">
                     <span> DATOS </span>
@@ -38,7 +37,8 @@
                         <ul class="list-group" style='font-size: 10px'>
                             @foreach ($infos as $info)
                                 <li class="list-group-item p-1"> <strong> Fecha inicio: </strong>
-                                    {{ $info['fecha_inicio'] }}
+                                    <span>{{ $info['fecha_inicio'] }}</span>
+                                    {{--  style="margin-left:110px;"  --}}
                                 </li>
                                 <li class="list-group-item p-1"> <strong> Fecha final: </strong>
                                     {{ $info['fecha_final'] }}
@@ -84,8 +84,8 @@
                             </tbody>
                         </table>
                         {{--  </div>  --}}
-
-                        <button onclick="pdf_init()">imprimir</button>
+                        {{--  <button id="pdf-generate">imprimir</button>  --}}
+                        {{-- onclick="printDiv('photo')"  --}}
                     </div>
 
 
@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-10 col-xxl-10 d-flex ">
+        <div class="col-9 col-lg-10 col-xxl-10 d-flex ">
             {{--  <div class="card flex-fill w-100  h-100">  --}}
             <div class="card">
                 <div class="card-header bg-dark bg-gradient text-light">
@@ -150,7 +150,7 @@
                         culling: true,
                         outer: false,
                         culling: {
-                            max: window.innerWidth > 800 ? 15 : 4
+                            max: window.innerWidth > 800 ? 10 : 4
                         },
 
 
@@ -265,7 +265,7 @@
                         culling: true,
                         outer: false,
                         culling: {
-                            max: window.innerWidth > 800 ? 15 : 4
+                            max: window.innerWidth > 800 ? 10 : 4
                         },
 
                     },
@@ -346,47 +346,119 @@
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/js-html2pdf@1.1.4/lib/html2pdf.min.js"></script>
+    {{--  <script src="https://cdn.jsdelivr.net/npm/js-html2pdf@1.1.4/lib/html2pdf.min.js"></script>  --}}
+    {{--  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>  --}}
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+        integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.1.223/styles/kendo.common.min.css" />
+    <script src="https://kendo.cdn.telerik.com/2017.1.223/js/jszip.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2017.1.223/js/kendo.all.min.js"></script>
+
+
+
     <script>
         function pdf_init() {
-            // Get the element to print
+
             var element = document.getElementById('photo');
-
-            // Define optional configuration
-            var options = {
-                filename: 'my-file.pdf'
-            };
-
-            // Create instance of html2pdf class
-            var exporter = new html2pdf(element, {
-                margin: 10,
+            var opt = {
+                margin: 1,
                 filename: 'myfile.pdf',
                 image: {
                     type: 'jpeg',
-                    quality: 0.98
+                    quality: 1
+
                 },
                 html2canvas: {
-                    scale: 2,
-                    logging: true,
-                    dpi: 192,
-                    letterRendering: true
+                    scale: 2
                 },
                 jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait'
+                    unit: 'pt',
+                    format: [screen.height - 410, screen.width - 620],
+                    orientation: 'l'
                 }
-            });
-
-            // Download the PDF or...
-            exporter.getPdf(true).then((pdf) => {
-                console.log('pdf file downloaded');
-            });
-
-            // Get the jsPDF object to work with it
-
-
+            };
+            // Old monolithic-style usage:
+            html2pdf(element, opt);
 
 
         }
+    </script>
+
+    <script>
+        function getPDF(selector) {
+            kendo.drawing.drawDOM($(selector)).then(function(group) {
+                kendo.drawing.pdf.saveAs(group, 'testing.pdf');
+            });
+        }
+    </script>
+
+    {{--  <script type="text/javascript">
+        $('#pdf-generate').click(function() {
+            var enviar = document.getElementById('photo');
+            getPDF(enviar);
+        })
+    </script>  --}}
+
+
+    <script>
+        function printDiv(divName) {
+            // fix weird back fill
+            d3.select('#' + divName).selectAll("path").attr("fill", "none");
+            //fix no axes
+            d3.select('#' + divName).selectAll("path.domain").attr("stroke", "black");
+            //fix no tick
+            d3.select('#' + divName).selectAll(".tick line").attr("stroke", "black");
+            // fix text going off the export (becuase my labels font size is larger than default)
+            d3.select('#' + divName + "> svg").style("font-size", "12px");
+            // add any other styles needed
+            var printContents = document.getElementById(divName).innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            window.location.reload();
+
+
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    {{--  Guardar pdf por medio del navegador  --}}
+    <script>
+        $('#pdf-generate').click(function() {
+            console.log('pdfGenerate');
+            html2canvas(document.querySelector('#photo')).then((canvas) => {
+                let base64image = canvas.toDataURL('image/png');
+                // console.log(base64image);
+                //let pdf = new jsPDF('l', 'mm', [280, 530]);
+                //pdf.addImage(base64image, 'PNG', 10, 10);
+
+                let pdf = new jsPDF('l', 'pt', 'a3');
+                pdf.addImage(base64image, 'PNG', 10, 10, 1115, 750);
+                pdf.save('graficas.pdf');
+            });
+
+        })
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var ti = JSON.parse('{!! json_encode($titulopagina) !!}');
+            var titulo = document.getElementById('titulopagina');
+            titulo.innerHTML = ''
+            titulo.innerHTML += `
+                ${ ti }
+            `;
+
+        });
     </script>

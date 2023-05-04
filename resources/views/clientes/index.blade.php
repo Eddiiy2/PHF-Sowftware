@@ -6,13 +6,15 @@
                 <div class="card-body">
                     <h5 style='font-size: 30px; color:black;'><strong> {{ $nomarea }} </strong></h5>
                     <strong style="display: none" id="area"> {{ $area }} </strong>
+                    <strong style="display: none" id="nombre_real"></strong>
                     <br>
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="inputGroupSelect01"> <strong> CIP </strong></label>
+                        <label class="input-group-text" for="inputGroupSelect01"> <strong> NOMBRE </strong></label>
                         <select id="cip" class="form-select">
 
                             @foreach ($cips as $cip)
-                                <option disabled selected> {{ $cip['nombre'] }} </option>
+                                {{--  disabled selected  --}}
+                                <option> {{ $cip['nombre'] }} </option>
                             @endforeach
                             {{--  <option>Todos</option>  --}}
 
@@ -35,8 +37,17 @@
                     <br>
 
                     {{--  <input type="text" id="datepicker">  --}}
-                    <button id="btnconsultar" class="button-29" role="button">Consultar</button>
 
+
+                    <div style="width: 100%;">
+                        <button class="button-consultar" role="button" id="btnconsultar"> CONSULTAR </button>
+
+                        <button id="timereal" class="button-85" role="button"><i
+                                class="fa-solid fa-tower-broadcast fa-beat" style="color:rgb(255, 255, 255)"></i>
+                            TIEMPO REAL </button>
+
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,23 +69,8 @@
                     </div>
                     <div class="table-responsive">
                         <table id="unicatabla" class="content-table" cellspacing="0"> {{--   table-striped table-hover  --}}
-                            <thead class="table-secondary ">
-                                <tr>
-                                    {{--  style="visibility:collapse; display:none;"  --}}
-                                    <th> lavados </th>
-                                    <th id="f_inicial"> f_inicial </th>
-                                    <th> f_final </th>
-                                    <th> hora_inicial </th>
-                                    <th> hora_final </th>
-                                    <th> duracion </th>
-                                    <th> idcip </th>
-                                    <th> cip </th>
-                                    <th> tipo_cip </th>
-                                    <th> equipo </th>
-                                    <th> usuario </th>
-                                    <th> Visualizar </th>
+                            <thead class="table-secondary" id="titulostabla">
 
-                                </tr>
                             </thead>
                             <tbody id="tablacontenido">
 
@@ -111,6 +107,30 @@
     </script>  --}}
 
 
+    <script>
+        $('#timereal').click(function(event) {
+            var nomcip = document.getElementById("cip").value;
+            let area = document.querySelector("#area").innerText.trim();
+
+            var today = new Date();
+            var day = today.getDate();
+            var month = today.getMonth() + 1;
+            var year = today.getFullYear();
+            const dia = `${year}-${month}-${day}`;
+
+            fetch('/idcip/' + nomcip + "_" + area)
+                .then(response => response.json())
+                .then(respuesta => {
+
+                    var datos = respuesta[0].nombre_real + "=" + area + "=" + dia;
+                    {{--  window.open('/timereal/ ' + datos, '_blank');  --}}
+                    window.open('/timerealview/ ' + datos, '_blank');
+
+                });
+
+
+        });
+    </script>
 
     {{--  Script para el ordenamiento de la tabla con click sobre la columna  --}}
     <script>
@@ -157,22 +177,98 @@
         }
     </script>
 
+
+
     <script>
         $("#btnconsultar").click(function(e) {
             e.preventDefault();
 
-            $("#buscar").find('option').not(':first').remove();
-            $("#buscar").val($("#buscar:first").val());
+            $("#buscar").find('option').not(':first')
+                .remove(); //Remueve el valor del select que estaba con anterioridad antes de clickear el btn consultar
+            $("#buscar").val($("#buscar:first").val()); //Poner en la primera opcion el select
 
+            var nomcip = document.getElementById("cip").value; //obteniendo el valor del cip seleccionado del select
+            let area = document.querySelector("#area").innerText.trim();
+
+            retornar_cip_real(nomcip, area);
+
+        });
+
+
+        function ingresarEncabezadosTabla() {
+            let cip = document.querySelector("#nombre_real").innerText.trim();
+
+            if (cip.replace(/\d+/g, '') == "cip") {
+                titulostabla.innerHTML = ''
+                titulostabla.innerHTML += `
+                 <tr>
+                        {{--  style="visibility:collapse; display:none;"  --}}
+                        <th class="text-center" style="visibility:collapse; display:none;"> lavados </th>
+                        <th class="text-center" id="f_inicial"> F.INICIO </th>
+                        <th class="text-center"> F.FINAL </th>
+                        <th class="text-center"> HORA INICIAL </th>
+                        <th class="text-center"> HORA FINAL </th>
+                        <th class="text-center"> DURACION </th>
+                        <th class="text-center" style="visibility:collapse; display:none;"> IDCIP </th>
+                        <th class="text-center" style="visibility:collapse; display:none;"> CIP </th>
+                        <th class="text-center"> TIPO CIP </th>
+                        <th class="text-center"> EQUIPO </th>
+                        <th class="text-center"> USUARIO </th>
+                        <th class="text-center"> VISUALIZAR </th>
+
+                </tr>
+            `;
+
+            } else {
+                if (cip.replace(/\d+/g, '') == "sp") {
+                    titulostabla.innerHTML = ''
+                    titulostabla.innerHTML += `
+                        <tr>
+                                {{--  style="visibility:collapse; display:none;"  --}}
+                                <th class="text-center"> PREPARADOS </th>
+                                <th class="text-center" id="f_inicial"> F.INICIO </th>
+                                <th class="text-center"> F.FINAL </th>
+                                <th class="text-center"> HORA INICIAL </th>
+                                <th class="text-center"> HORA FINAL </th>
+                                <th class="text-center"> DURACION </th>
+                                <th class="text-center"> IDSP </th>
+                                <th class="text-center"> SP </th>
+                                <th class="text-center"> SABOR </th>
+                                <th class="text-center"> EQUIPO </th>
+                                <th class="text-center"> USUARIO </th>
+                                <th class="text-center"> VISUALIZAR </th>
+
+                        </tr>
+                    `;
+                }
+            }
+
+
+
+        }
+
+        function retornar_cip_real(nomcip, area) {
+            var cip = "";
+            /*Haciendo peticion para saber el Id del cip*/
+            fetch('/idcip/' + nomcip + "_" + area)
+                .then(response => response.json())
+                .then(respuesta => {
+                    cip_real(respuesta[0].nombre_real);
+                    document.getElementById("nombre_real").innerHTML = "" + respuesta[0].nombre_real;
+                    ingresarEncabezadosTabla();
+                });
+            /*Esta eequivalencia del los cip01 en los case, etc es igual a las nom de las tablas que crea el depurador en ignition*/
+        }
+
+
+        function cip_real(cip_real) {
+            let area = document.querySelector("#area").innerText.trim();
+            var cip = cip_real;
             var r_div = document.getElementById("resultados");
-            var cip = document.getElementById("cip").value; //obteniendo el valor del cip seleccionado
-
             let f_inicio = (document.getElementById("startDate").value).split(
                 "-"); //haciendo array para dividir la fecha  de inicio seleccionada
             let f_final = (document.getElementById("endDate").value).split(
                 "-"); //haciendo array para dividir la fecha final seleccionada
-
-            let area = document.querySelector("#area").innerText.trim();
 
             // Obteniendo dia, mes y año de fecha de inicio
             var f_inicio_dia = f_inicio[2];
@@ -184,69 +280,76 @@
             var f_final_mes = f_final[1];
             var f_final_anio = f_final[0];
 
-            var nom = "";
-
-            var array = []; // Arreglo para obtener los valores del select que viene directo de la bd nom_cips
-            /* For para iterar entre los valores que contiene el select */
-            for (var i = 0; i < document.getElementById("cip").options.length - 1; i++) {
-                if (i > 0) { //Condicional para evitar el "Seleccione una opcion"
-                    array.push(document.getElementById("cip").options[i].value);
-                }
-            }
-
-            nom =
+            var nom =
                 "SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema' AND tablename between '" +
                 cip + "_" + f_inicio_anio + "_" + f_inicio_mes + "_" + f_inicio_dia + "_" + area +
                 "' and '" + cip +
                 "_" +
                 f_final_anio + "_" + f_final_mes + "_" + f_final_dia + "_" + area + "';";
 
-
-
-            //console.log(nom);
-
-
-            // let datos = { nombre:cip, fecha_inicial:f_inicio,  fecha_final:f_final };
-
+            console.log(nom);
             fetch('/buscar/' + nom)
                 .then(response => response.json())
                 .then(respuesta => {
 
-                    //console.log(JSON.stringify(respuesta));
+                    console.log(JSON.stringify(respuesta));
                     tabla(respuesta);
                     r_div.style.display = "block";
                     ordenar();
 
                 });
+        }
 
-        });
 
         function tabla(respuesta) {
             const buscador = [];
             tablacontenido.innerHTML = ''
             for (let valor of respuesta) {
                 for (let i = 0; i < valor.length; i++) {
-                    //console.log(valor[i]);
+                    let cip = document.querySelector("#nombre_real").innerText.trim(); //Obteniendo el nom del cip real
+                    //cip.replace(/\d+/g, '') Eliminando los numeros, para solo dejar las letras ya sea cip o sp
 
-                    //console.log(valor[i].tipo_cip +"-"+valor[i].hora_inicial);
-                    tablacontenido.innerHTML += `
-                    <tr style='font-size: 12px' >
-                        <td class="text-center"> ${ valor[i].idlavados } </td>
-                        <td class="text-center"> ${ valor[i].f_inicial } </td>
-                        <td class="text-center"> ${ valor[i].f_final } </td>
-                        <td class="text-center"> ${ valor[i].hora_inicial } </td>
-                        <td class="text-center"> ${ valor[i].hora_final } </td>
-                        <td class="text-center"> ${ valor[i].duracion } </td>
-                        <td class="text-center"> ${ valor[i].idcip } </td>
-                        <td class="text-center"> ${ valor[i].cip } </td>
-                        <td class="text-center"> ${ valor[i].tipo_cip }  </td>
-                        <td class="text-center"> ${ valor[i].equipo } </td>
-                        <td class="text-center"> ${ valor[i].usuario } </td>
+                    if (cip.replace(/\d+/g, '') == "cip") {
+                        tablacontenido.innerHTML += `
+                        <tr style='font-size: 12px' >
+                            <td class="text-center" style="visibility:collapse; display:none;"> ${ valor[i].idlavados } </td>
+                            <td class="text-center"> ${ valor[i].f_inicial } </td>
+                            <td class="text-center"> ${ valor[i].f_final } </td>
+                            <td class="text-center"> ${ valor[i].hora_inicial } </td>
+                            <td class="text-center"> ${ valor[i].hora_final } </td>
+                            <td class="text-center"> ${ valor[i].duracion } </td>
+                            <td class="text-center" style="visibility:collapse; display:none;"> ${ valor[i].idcip } </td>
+                            <td class="text-center" style="visibility:collapse; display:none;"> ${ valor[i].cip } </td>
+                            <td class="text-center"> ${ valor[i].tipo_cip }  </td>
+                            <td class="text-center"> ${ valor[i].equipo } </td>
+                            <td class="text-center"> ${ valor[i].usuario } </td>
 
 
-                        <td class="text-center"><button class="btn btn-outline-success" > <i id="graficar" class="fa-solid fa-chart-line fa-xl"></i> </button></td>
-                    </tr>
-                `;
+                            <td class="text-center"><button class="btn btn-outline-success" > <i id="graficar" class="fa-solid fa-chart-line fa-xl"></i> </button></td>
+                        </tr>
+                    `;
+                    } else {
+                        if (cip.replace(/\d+/g, '') == "sp") {
+                            tablacontenido.innerHTML += `
+                            <tr style='font-size: 12px' >
+                                <td class="text-center"> ${ valor[i].idpreparacion } </td>
+                                <td class="text-center"> ${ valor[i].f_inicial } </td>
+                                <td class="text-center"> ${ valor[i].f_final } </td>
+                                <td class="text-center"> ${ valor[i].hora_inicial } </td>
+                                <td class="text-center"> ${ valor[i].hora_final } </td>
+                                <td class="text-center"> ${ valor[i].duracion } </td>
+                                <td class="text-center"> ${ valor[i].idsp } </td>
+                                <td class="text-center"> ${ valor[i].sp } </td>
+                                <td class="text-center"> ${ valor[i].sabor }  </td>
+                                <td class="text-center"> ${ valor[i].equipo } </td>
+                                <td class="text-center"> ${ valor[i].usuario } </td>
+
+
+                                <td class="text-center"><button class="btn btn-outline-success" ><i id="graficar" class="fa-solid fa-chart-line fa-xl"></i></button></td>
+                            </tr>
+                        `;
+                        }
+                    }
 
                     buscador.push("" + valor[i].equipo);
 
@@ -269,17 +372,18 @@
         }
 
         $('#tablacontenido').on('click', '#graficar', (e) => {
+            let cip = document.querySelector("#nombre_real").innerText.trim();
             var td = event.target.parentNode;
             var tr = td.parentNode;
             //tr.parentNode.children[1].textContent
 
 
-            var filaseleccionada = tr.parentNode.children[0].textContent + "=" + tr.parentNode.children[7]
-                .textContent + "=" + tr.parentNode.children[1].textContent + "=" + tr.parentNode.children[9]
+            var filaseleccionada = tr.parentNode.children[0].textContent + "=" + cip + "=" + tr.parentNode.children[
+                    2].textContent + "=" + tr.parentNode.children[9]
                 .textContent + "=" + document.querySelector("#area").innerText.trim() + "=" + tr.parentNode
                 .children[6].textContent;
 
-            //console.log(filaseleccionada);
+            console.log(filaseleccionada);
 
             //window.location = '/graficas/' + filaseleccionada;
             window.open('/graficas/ ' + filaseleccionada, '_blank');

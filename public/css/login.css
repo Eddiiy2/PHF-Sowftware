@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400');
+
+body,
+html {
+    font-family: 'Source Sans Pro', sans-serif;
+    background-color: #1d243d;
+    padding: 0;
+    margin: 0;
+}
+
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.container {
+    margin: 0;
+    top: 90px;
+    left: 50%;
+    position: absolute;
+    text-align: center;
+    transform: translateX(-50%);
+    background-color: rgb(33, 41, 66);
+    border-radius: 19px;
+    border-top: 10px solid #0d50d4;
+    border-bottom: 10px solid #0d50d4;
+    width: 400px;
+    height: 600px;
+    box-shadow: 1px 1px 108.8px 19.2px rgb(145, 168, 191);
+}
+
+.box h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #5c6bc0;
+    font-size: 25px;
+    margin-top: 54px;
+    ;
+}
+
+.box h4 span {
+    color: #dfdeee;
+    font-weight: lighter;
+}
+
+.box h5 {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 13px;
+    color: #a1a4ad;
+    letter-spacing: 1.5px;
+    margin-top: -15px;
+    margin-bottom: 70px;
+}
+
+.box input[type="email"],
+.box input[type="password"] {
+    display: run-in;
+    margin: 70px auto;
+    background: #262e49;
+    border: 2;
+    border-radius: 15px;
+    padding: 14px 12px;
+    width: 370px;
+    outline: none;
+    color: #f5f5f5;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -ms-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+
+}
+
+::-webkit-input-placeholder {
+    color: #565f79;
+}
+
+.box input[type="email"]:focus,
+.box input[type="password"]:focus {
+    border: 1px solid #79A6FE;
+
+}
+
+a {
+    color: #5c7fda;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+label input[type="checkbox"] {
+    display: none;
+    /* hide the default checkbox */
+}
+
+/* style the artificial checkbox */
+label span {
+    height: 13px;
+    width: 13px;
+    border: 2px solid #464d64;
+    border-radius: 2px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    float: left;
+    left: 7.5%;
+}
+
+.btn1 {
+    border: 0;
+    background: #0c43a8;
+    color: #dfdeee;
+    border-radius: 100px;
+    width: 340px;
+    height: 49px;
+    font-size: 16px;
+    position: absolute;
+    top: 79%;
+    left: 8%;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.btn1:hover {
+    background: #5d33e6;
+}
+
+.rmb {
+    position: absolute;
+    margin-left: -43%;
+    margin-top: -63px;
+
+    color: #dfdeee;
+    font-size: 13px;
+}
+
+.poner_correo {
+    position: absolute;
+    margin-left: -45%;
+    margin-top: 37px;
+
+    color: #dfdeee;
+    font-size: 14px;
+}
+
+.poner_contraseña {
+    position: absolute;
+    margin-left: -45%;
+    margin-top: -27px;
+
+    color: #dfdeee;
+    font-size: 14px;
+}
+
+.forgetpass {
+    position: relative;
+    float: right;
+    right: 28px;
+}
+
+.dnthave {
+    position: absolute;
+    top: 92%;
+    left: 24%;
+}
+
+[type=checkbox]:checked+span:before {
+    /* <-- style its checked state */
+    font-family: FontAwesome;
+    font-size: 16px;
+    content: "\f00c";
+    position: absolute;
+    top: -4px;
+    color: #896cec;
+    left: -10px;
+    width: 13px;
+}
+
+.typcn {
+    position: absolute;
+    left: 39px;
+    top: 282px;
+    color: #3b476b;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.typcn.active {
+    color: #c72b26;
+}
+
+.error {
+    background: #ff3333;
+    text-align: center;
+    width: 337px;
+    height: 20px;
+    padding: 2px;
+    border: 0;
+    border-radius: 5px;
+    margin: 10px auto 10px;
+    position: absolute;
+    top: 31%;
+    left: 7.2%;
+    color: white;
+    display: none;
+}
+
+.footer {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    top: 605px;
+    width: 100%;
+    color: #78797d;
+    font-size: 14px;
+    text-align: center;
+}
+
+.footer .fa {
+    color: #7f5feb;
+}
