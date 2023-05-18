@@ -33,30 +33,68 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
+                        <span
+                            style="font-family:Lobster; font-weight: 600; font-size: 18px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); text-align: center">{{ $planta[0]['nombre'] }}</span>
+                        <span
+                            style="font-family:Lobster; color: rgb(0, 0, 0); text-align: center; font-weight: 600; margin-top:5px;">{{ $planta[0]['sucursal'] }}</span>
+                        <br><br>
 
                         <ul class="list-group" style='font-size: 10px'>
+                            <li class="list-group-item p-1">
+
+                                <span><strong> Proceso: </strong></span>
+                                <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                                    <span>{{ $nomcip }}</span>
+                                </div>
+
+                            </li>
+
+
                             @foreach ($infos as $info)
-                                <li class="list-group-item p-1"> <strong> Fecha inicio: </strong>
-                                    <span>{{ $info['fecha_inicio'] }}</span>
-                                    {{--  style="margin-left:110px;"  --}}
+                                <li class="list-group-item p-1">
+
+                                    <span><strong> Fecha inicio: </strong></span>
+                                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                                        <span>{{ $info['fecha_inicio'] }}</span>
+                                    </div>
+
                                 </li>
-                                <li class="list-group-item p-1"> <strong> Fecha final: </strong>
-                                    {{ $info['fecha_final'] }}
+                                <li class="list-group-item p-1">
+                                    <strong> Fecha final: </strong>
+                                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                                        {{ $info['fecha_final'] }}
+                                    </div>
                                 </li>
                                 <li class="list-group-item p-1"> <strong> Hora inicio: </strong>
-                                    {{ $info['hora_inicio'] }}
+                                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                                        {{ $info['hora_inicio'] }}
+                                    </div>
                                 </li>
                                 <li class="list-group-item p-1"> <strong> Hora final: </strong>
-                                    {{ $info['hora_final'] }}
+                                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                                        {{ $info['hora_final'] }}
+                                    </div>
                                 </li>
-                                <li class="list-group-item p-1"> <strong> Duracion: </strong> {{ $info['duracion'] }}
+                                <li class="list-group-item p-1"> <strong> Duracion: </strong>
+                                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                                        {{ $info['duracion'] }}
+                                    </div>
                                 </li>
                                 <li class="list-group-item p-1"> <strong> Tipo de cip: </strong>
-                                    {{ $info['tipo_cip'] }}
+                                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                                        {{ $info['tipo_cip'] }}
+                                    </div>
                                 </li>
-                                <li class="list-group-item p-1"> <strong> Usuario: </strong> {{ $info['usuario'] }}
+                                <li class="list-group-item p-1"> <strong> Usuario: </strong>
+                                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                                        {{ $info['usuario'] }}
+                                    </div>
                                 </li>
-                                <li class="list-group-item p-1"> <strong> Equipo: </strong> {{ $info['equipo'] }} </li>
+                                <li class="list-group-item p-1"> <strong> Equipo: </strong>
+                                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                                        {{ $info['equipo'] }}
+                                    </div>
+                                </li>
                             @endforeach
                         </ul>
                     </div>
@@ -87,8 +125,19 @@
                         {{--  <button id="pdf-generate">imprimir</button>  --}}
                         {{-- onclick="printDiv('photo')"  --}}
                     </div>
+                </div>
 
-
+                <div class="card-footer">
+                    <div style="margin-bottom:30px">
+                        <strong><span style='font-size: 10px; color:rgb(179, 179, 179);'>DESARROLLADO
+                                POR:</span></strong><br>
+                        <span style='font-size: 10px; color:rgb(179, 179, 179);'>AIM INGENIERIA SA DE CV</span><br>
+                        <span style='font-size: 10px; color:rgb(179, 179, 179);'>VALLE BALAM 115</span><br>
+                        <span style='font-size: 10px; color:rgb(179, 179, 179);'>COL.VALLE ANTIGUA, LEON, GTO
+                            37353:</span><br>
+                        <span style='font-size: 10px;'><a style="color:rgb(179, 179, 179);"
+                                href="https://www.aimingenieria.com/">AIMINGENIERIA.COM</a></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -106,8 +155,6 @@
 
             </div>
         </div>
-
-
     </div>
 
     <script>
@@ -115,17 +162,18 @@
         var points = JSON.parse('{!! json_encode($points) !!}');
         var labels = JSON.parse('{!! json_encode($labels_grap1) !!}');
 
+
         var chart = c3.generate({
 
             bindto: '#chart_conductividad',
             data: {
                 json: puntos,
+                xFormat: '%Y-%m-%d %H:%M:%S',
                 keys: {
                     x: 'horas',
                     value: [labels[0].x, labels[0].y, labels[0].z],
                 }
             },
-
             point: {
                 r: 0,
                 //show: false,
@@ -142,18 +190,20 @@
                     type: 'categories', //timeseries
                     tick: {
 
+                        //count:3
                         centered: true,
                         format: '%H:%M:%S',
                         rotate: 0,
                         multiline: false,
-                        fit: true, // Los labels se adaptan al ancho de la pantalla
-                        culling: true,
+                        fit: false, // Los labels se adaptan al ancho de la pantalla
+                        count: 2,
                         outer: false,
-                        culling: {
-                            max: window.innerWidth > 800 ? 10 : 4
-                        },
 
 
+                    },
+
+                    padding: {
+                        right: 12
                     },
 
                     height: 45,
@@ -164,6 +214,15 @@
                     }
                 },
                 y: {
+                    {{--  Codigo para definir un rango de Y  --}}
+                    {{--  padding: {
+                        top: 200,
+                        bottom: 0
+                    },  --}}
+
+
+                    min: 1,
+
                     label: { // ADD
                         text: "{!! $ejes['y2'] !!}",
                         position: 'outer-middle'
@@ -173,6 +232,7 @@
                 }
 
             },
+
             grid: {
                 x: {
                     //show: true,
@@ -192,22 +252,15 @@
             },
 
             onrendered: function() {
-
-                // for each svg element with the class 'c3-xgrid-line'
-                d3.selectAll('.c3-xgrid-line').each(function(d, i) {
-
+                d3.selectAll('.c3-xgrid-line.black').each(function(d, i) {
                     // cache the group node
                     var groupNode = d3.select(this).node();
-
                     // for each 'text' element within the group
                     d3.select(this).select('text').each(function(d, i) {
-
-                        // hide the text to get size of group box otherwise text affects size.
+                        // hide the text to get size o  f group box otherwise text affects size.
                         d3.select(this).attr("hidden", true);
-
                         // use svg getBBox() func to get the group size without the text - want the position
                         var groupBx = groupNode.getBBox();
-
                         d3.select(this)
                             .attr('transform', null) // remove text rotation
                             .attr('x', groupBx.x) // x-offset from left of chart
@@ -219,10 +272,32 @@
                             .style('fill', 'black'); // color it red for fun
                     })
                 })
+
+                d3.selectAll('.c3-xgrid-line.hora').each(function(d, i) {
+                    var groupNode = d3.select(this).node();
+                    d3.select(this).select('text').each(function(d, i) {
+                        d3.select(this).attr("hidden", true);
+                        var groupBx = groupNode.getBBox();
+                        d3.select(this)
+                            .attr('transform', null)
+                            .attr('x', groupBx.x)
+                            .attr('y', groupBx.height - 18)
+                            .attr('dx', 5)
+                            .attr('dy', 15)
+                            .attr("hidden", null)
+                            .attr("text-anchor", null)
+                            .style('fill', 'black');
+                    })
+                })
+
+
             }
+
 
         });
     </script>
+
+
 
     <script>
         var puntos = JSON.parse('{!! json_encode($graficar) !!}');
@@ -261,13 +336,15 @@
                         format: '%H:%M:%S',
                         rotate: 0,
                         multiline: false,
-                        fit: true, // Los labels se adaptan al ancho de la pantalla
-                        culling: true,
+                        fit: false, // Los labels se adaptan al ancho de la pantalla
+                        count: 2,
                         outer: false,
-                        culling: {
-                            max: window.innerWidth > 800 ? 10 : 4
-                        },
 
+
+                    },
+
+                    padding: {
+                        right: 12
                     },
 
                     height: 45,
@@ -280,7 +357,7 @@
                 reotated: true,
                 y: {
 
-
+                    min: 1,
                     padding: {
                         top: 0,
                         bottom: 0
@@ -313,24 +390,16 @@
                 window.innerWidth > 800 ? chart.internal.config.axis_x_tick_culling_max = 8 : chart.internal
                     .config.axis_x_tick_culling_max = 4;
             },
-
             onrendered: function() {
-
-                // for each svg element with the class 'c3-xgrid-line'
-                d3.selectAll('.c3-xgrid-line').each(function(d, i) {
-
+                d3.selectAll('.c3-xgrid-line.black').each(function(d, i) {
                     // cache the group node
                     var groupNode = d3.select(this).node();
-
                     // for each 'text' element within the group
                     d3.select(this).select('text').each(function(d, i) {
-
-                        // hide the text to get size of group box otherwise text affects size.
+                        // hide the text to get size o  f group box otherwise text affects size.
                         d3.select(this).attr("hidden", true);
-
                         // use svg getBBox() func to get the group size without the text - want the position
                         var groupBx = groupNode.getBBox();
-
                         d3.select(this)
                             .attr('transform', null) // remove text rotation
                             .attr('x', groupBx.x) // x-offset from left of chart
@@ -342,9 +411,34 @@
                             .style('fill', 'black'); // color it red for fun
                     })
                 })
+
+                d3.selectAll('.c3-xgrid-line.hora').each(function(d, i) {
+                    var groupNode = d3.select(this).node();
+                    d3.select(this).select('text').each(function(d, i) {
+                        d3.select(this).attr("hidden", true);
+                        var groupBx = groupNode.getBBox();
+                        d3.select(this)
+                            .attr('transform', null)
+                            .attr('x', groupBx.x)
+                            .attr('y', groupBx.height - 18)
+                            .attr('dx', 5)
+                            .attr('dy', 15)
+                            .attr("hidden", null)
+                            .attr("text-anchor", null)
+                            .style('fill', 'black');
+                    })
+                })
+
+
             }
+
         });
     </script>
+
+
+
+
+
 
     {{--  <script src="https://cdn.jsdelivr.net/npm/js-html2pdf@1.1.4/lib/html2pdf.min.js"></script>  --}}
     {{--  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>  --}}
@@ -397,12 +491,12 @@
         }
     </script>
 
-    {{--  <script type="text/javascript">
+    <script type="text/javascript">
         $('#pdf-generate').click(function() {
             var enviar = document.getElementById('photo');
             getPDF(enviar);
         })
-    </script>  --}}
+    </script>
 
 
     <script>
@@ -434,7 +528,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     {{--  Guardar pdf por medio del navegador  --}}
-    <script>
+    {{--  <script>
         $('#pdf-generate').click(function() {
             console.log('pdfGenerate');
             html2canvas(document.querySelector('#photo')).then((canvas) => {
@@ -449,7 +543,7 @@
             });
 
         })
-    </script>
+    </script>  --}}
 
     <script>
         $(document).ready(function() {

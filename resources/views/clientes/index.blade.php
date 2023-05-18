@@ -38,14 +38,8 @@
 
                     {{--  <input type="text" id="datepicker">  --}}
 
-
-                    <div style="width: 100%;">
-                        <button class="button-consultar" role="button" id="btnconsultar"> CONSULTAR </button>
-
-                        <button id="timereal" class="button-85" role="button"><i
-                                class="fa-solid fa-tower-broadcast fa-beat" style="color:rgb(255, 255, 255)"></i>
-                            TIEMPO REAL </button>
-
+                    <div style="width: 100%;" id="div_btn">
+                        <button class="button-consultar" role="button" onclick="btnconsultar()"> CONSULTAR </button>
 
                     </div>
                 </div>
@@ -56,7 +50,6 @@
                 <div id="resultados" class="card-body" style="display:none;">
                     <h5 style='font-size: 30px; color:black;'><strong> Resultado de la búsqueda </strong></h5>
                     <br>
-
                     <div class="input-group mb-3">
                         <label class="btn btn-dark" for="inputGroupSelect01"> <strong> <i class="fa fa-search"></i> Filtrar
                                 por
@@ -107,8 +100,64 @@
     </script>  --}}
 
 
+
+    {{--  Verificando si hay datos en las tablas principales de CIP y SP, para activar o desactivar el bton  --}}
     <script>
-        $('#timereal').click(function(event) {
+        $(document).ready(function() {
+            llamar();
+        });
+
+        function llamar() {
+            setInterval(function() {
+                var nomcip = document.getElementById("cip").value;
+                let area = document.querySelector("#area").innerText.trim();
+
+                var today = new Date();
+                var day = today.getDate();
+                var month = today.getMonth() + 1;
+                var year = today.getFullYear();
+                const dia = `${year}-${month}-${day}`;
+
+
+                fetch('/idcip/' + nomcip + "_" + area)
+                    .then(response => response.json())
+                    .then(respuesta => {
+                        var cip = respuesta[0].nombre_real;
+                        var datos = cip + "_" + '2023-05-01';
+                        verificador(datos);
+                    });
+            }, 1000);
+        }
+
+        function verificador(datos) {
+            fetch('/verificarDatosTiempoReal/' + datos)
+                .then(response => response.json())
+                .then(res => {
+                    console.log(res.estado);
+                    if (res.estado == 'activo') {
+                        div_btn.innerHTML = `
+                            <button class="button-consultar" role="button" onclick="btnconsultar()"> CONSULTAR </button>
+
+                            <button onclick="timereal()" class="button-85" role="button"><i
+                                class="fa-solid fa-tower-broadcast fa-beat" style="color:rgb(255, 255, 255)"></i>
+                            TIEMPO REAL </button>
+                            `;
+                    } else {
+                        div_btn.innerHTML = `
+                            <button class="button-consultar" role="button" onclick="btnconsultar()"> CONSULTAR </button>
+                            `;
+                    }
+
+
+                });
+        }
+    </script>
+
+    {{--  Metodo para enviar a la ventana de tiempo real dando click en el boton   --}}
+    <script>
+        function timereal() {
+
+
             var nomcip = document.getElementById("cip").value;
             let area = document.querySelector("#area").innerText.trim();
 
@@ -129,7 +178,7 @@
                 });
 
 
-        });
+        }
     </script>
 
     {{--  Script para el ordenamiento de la tabla con click sobre la columna  --}}
@@ -180,19 +229,19 @@
 
 
     <script>
-        $("#btnconsultar").click(function(e) {
-            e.preventDefault();
+        function btnconsultar() {
 
             $("#buscar").find('option').not(':first')
                 .remove(); //Remueve el valor del select que estaba con anterioridad antes de clickear el btn consultar
             $("#buscar").val($("#buscar:first").val()); //Poner en la primera opcion el select
 
-            var nomcip = document.getElementById("cip").value; //obteniendo el valor del cip seleccionado del select
+            var nomcip = document.getElementById("cip").value;
+            //obteniendo el valor del cip seleccionado del select
             let area = document.querySelector("#area").innerText.trim();
 
             retornar_cip_real(nomcip, area);
 
-        });
+        }
 
 
         function ingresarEncabezadosTabla() {
@@ -287,12 +336,12 @@
                 "_" +
                 f_final_anio + "_" + f_final_mes + "_" + f_final_dia + "_" + area + "';";
 
-            console.log(nom);
+            //console.log(nom);
             fetch('/buscar/' + nom)
                 .then(response => response.json())
                 .then(respuesta => {
 
-                    console.log(JSON.stringify(respuesta));
+                    //console.log(JSON.stringify(respuesta));
                     tabla(respuesta);
                     r_div.style.display = "block";
                     ordenar();
@@ -325,7 +374,7 @@
                             <td class="text-center"> ${ valor[i].usuario } </td>
 
 
-                            <td class="text-center"><button class="btn btn-outline-success" > <i id="graficar" class="fa-solid fa-chart-line fa-xl"></i> </button></td>
+                            <td class="text-center"><button class="btn btn-outline-success" ><i id="graficar" class="fa-solid fa-chart-line fa-xl"></i></button></td>
                         </tr>
                     `;
                     } else {
@@ -356,6 +405,10 @@
                 }
             }
 
+            $("#buscar").find('option').not(':first')
+                .remove(); //Remueve el valor del select que estaba con anterioridad antes de clickear el btn consultar
+            $("#buscar").val($("#buscar:first").val()); //Poner en la primera opcion el select
+
             const unicos = buscador.filter((valor, indice) => {
                 return buscador.indexOf(valor) === indice;
             });
@@ -372,18 +425,22 @@
         }
 
         $('#tablacontenido').on('click', '#graficar', (e) => {
+            console.log("dio click");
+
             let cip = document.querySelector("#nombre_real").innerText.trim();
             var td = event.target.parentNode;
             var tr = td.parentNode;
+            var nomcip = document.getElementById("cip").value;
+
             //tr.parentNode.children[1].textContent
 
 
             var filaseleccionada = tr.parentNode.children[0].textContent + "=" + cip + "=" + tr.parentNode.children[
                     2].textContent + "=" + tr.parentNode.children[9]
                 .textContent + "=" + document.querySelector("#area").innerText.trim() + "=" + tr.parentNode
-                .children[6].textContent;
+                .children[6].textContent + "=" + nomcip;
 
-            console.log(filaseleccionada);
+            // console.log(filaseleccionada);
 
             //window.location = '/graficas/' + filaseleccionada;
             window.open('/graficas/ ' + filaseleccionada, '_blank');
@@ -463,7 +520,7 @@
             let select = document.getElementById("cip");
             select.value = "" + seleccionado[0].nombre;
             if (seleccionado[0].nombre === "") {
-                console.log("ESTA VACIO");
+                //console.log("ESTA VACIO");
             }
 
         });

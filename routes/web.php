@@ -40,6 +40,7 @@ Route::get('/nomcips/{n}', [TablaController::class, 'nomcips']); //Ruta para la 
 Route::get('/idcip/{n}', [TablaController::class, 'consultaridcip']);
 Route::get('/timerealview/{datos}', [TablaController::class, 'viewtime']);
 Route::get('/timereal/{datos}', [TablaController::class, 'indextime']);
+Route::get('/verificarDatosTiempoReal/{datos}', [TablaController::class, 'verificarDatosTiempoReal']);
 
 // Rutas para el login, el validado de usuarios y la salida de usuarios
 Route::get('/login', [EntradaController::class, 'login'])->name('entrada');

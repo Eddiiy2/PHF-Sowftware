@@ -243,3 +243,50 @@
 .c3-drag-zoom .extent {
     fill-opacity: 0.1;
 }
+
+/* modificando el color de las lineas verticales en las graficas */
+
+/*
+.c3-xgrid-line.black line {
+    stroke: gray;
+    color de la linea
+    stroke-dasharray: 5, 5;
+     punteo de la linea
+}
+
+.c3-xgrid-line.black text {
+    writing-mode: vertical-rl;
+    direction: rtl;
+}
+
+
+
+.c3-xgrid-line.hora line {
+    stroke: gray;
+     color de la linea
+    stroke-dasharray: 5, 5;
+     punteo de la linea
+}
+
+.c3-xgrid-line.hora text {
+
+    direction: ltr;
+    writing-mode: vertical-rl;
+
+
+}*/
+
+.c3-xgrid-line.black line {
+    stroke: gray;
+    stroke-dasharray: 5, 5;
+}
+
+.c3-xgrid-line.hora line {
+    stroke: gray;
+    stroke-dasharray: 5, 5;
+}
+
+
+.tick line {
+    opacity: 1;
+}

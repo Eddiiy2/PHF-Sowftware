@@ -255,7 +255,10 @@ class TablaController extends Controller
         // [3] -> equipo
         // [4] -> area
         // [5] -> idcip
-
+        // [6] -> nomcip del selector
+        $nom_area = DB::select("select titulo from view_cips_navbar where area= '$separados[4]';");
+        $nom_area = json_decode(json_encode($nom_area), true);
+        $nom_de_area = $nom_area[0]['titulo'];
 
         $graficar = [];
         $infos = [];
@@ -263,8 +266,12 @@ class TablaController extends Controller
         $tabla = $separados[1] . "_" . str_replace("-", "_", $separados[2]) . "_cips";
         $tabla = $separados[1] . "_" . $fecha . "_" . $separados[4];
         $points = [];
-
         $titulopagina =  $separados[1] . "_" . $separados[3] . "_" . $fecha;
+
+        $planta = DB::select('select * from nom_planta');
+        $planta = json_decode(json_encode($planta), true);
+        $nomcip = $separados[6];
+
 
 
         if (preg_replace('/[0-9]+/', '', $separados[1]) == "cip") {
@@ -284,6 +291,9 @@ class TablaController extends Controller
             foreach ($marcas as $marca) {
                 $points[] = ['value' => $marca['inicio'], 'class' => 'black', 'text' => $marca['nombre']];
                 $points[] = ['value' => $marca['fin'], 'class' => 'black'];
+
+                $points[] = ['value' => $marca['inicio'], 'class' => 'hora', 'text' => $marca['inicio']];
+                $points[] = ['value' => $marca['fin'], 'class' => 'hora', 'text' => $marca['fin']];
             }
 
             //$points = json_encode($points,true); No es necesario convertirlo a JSON aqui ya que en el blade se convertira
@@ -346,7 +356,7 @@ class TablaController extends Controller
                 ];
             }
 
-            return view('graficos.graficas', ['graficar' => $graficar, 'ejes' => $ejes, 'infos' => $infos, 'datostabla' => $datostabladep, 'points' => $points, 'labels_grap2' => $labels_grap2, 'labels_grap1' => $labels_grap1, 'titulopagina' => $titulopagina]);
+            return view('graficos.graficas', ['graficar' => $graficar, 'ejes' => $ejes, 'infos' => $infos, 'datostabla' => $datostabladep, 'points' => $points, 'labels_grap2' => $labels_grap2, 'labels_grap1' => $labels_grap1, 'titulopagina' => $titulopagina, 'nomcip' => $nomcip, 'planta' => $planta, 'nom_de_area' => $nom_de_area]);
         } else {
             // Condicional para las graficas del sistema de preparacion
             if (preg_replace('/[0-9]+/', '', $separados[1]) == "sp") {
@@ -433,15 +443,18 @@ class TablaController extends Controller
                         $ejes = ['x' => "Horas", 'y' => "Litros ", 'y2' => 'Kilogramos'];
 
 
+                        $labels_grap2 = ['x' => $etiquetas_grap2[0]['d1'], 'y' => $etiquetas_grap2[0]['d2'], 'z' => $etiquetas_grap2[0]['d3']];
                         foreach ($datos as $dato) {
                             $graficar[] = [
-                                'horas' => $dato['hora'], $etiquetas_grap1[0]['d1'] => $dato['agua_sp'], $etiquetas_grap1[0]['d2'] => $dato['agua_acc'], $etiquetas_grap1[0]['d3'] => $dato['agua_vel']
+                                'horas' => $dato['hora'],
+                                $etiquetas_grap1[0]['d1'] => $dato['agua_sp'], $etiquetas_grap1[0]['d2'] => $dato['agua_acc'], $etiquetas_grap1[0]['d3'] => $dato['agua_vel'],
+                                $etiquetas_grap2[0]['d1'] => $dato['hfcs_sp'], $etiquetas_grap2[0]['d2'] => $dato['hfcs_acc'], $etiquetas_grap2[0]['d3'] => $dato['hfcs_vel']
                             ];
                         }
                         break;
                 }
 
-                return view('graficos.sp', ['graficar' => $graficar, 'ejes' => $ejes, 'infos' => $infos, 'datostabla' => $datostabla, 'points' => $points, 'labels_grap2' => $labels_grap2, 'labels_grap1' => $labels_grap1, 'sp' => $separados[1], 'titulopagina' => $titulopagina]);
+                return view('graficos.sp', ['graficar' => $graficar, 'ejes' => $ejes, 'infos' => $infos, 'datostabla' => $datostabla, 'points' => $points, 'labels_grap2' => $labels_grap2, 'labels_grap1' => $labels_grap1, 'sp' => $separados[1], 'titulopagina' => $titulopagina, 'nomcip' => $nomcip, 'planta' => $planta, 'nom_de_area' => $nom_de_area]);
             }
         }
     }
@@ -487,10 +500,10 @@ class TablaController extends Controller
     }
 
 
+    //Funcion para CIP para enviar los datos en tiempo real (AJAX)
     public function indextime($datos)
     {
 
-        $graficar = [];
         $ejes = ['x' => "Horas", 'y' => "Temperaturas ", 'y2' => 'Conductividad'];
         $infos = [];
         $points = [];
@@ -501,6 +514,10 @@ class TablaController extends Controller
         $area = $separados[1];
         $fecha = $separados[2];
 
+        $planta = DB::select('select * from nom_planta');
+        $planta = json_decode(json_encode($planta), true);
+        $nomcip = $separados[0];
+
         $letra = preg_replace('/[0-9]+/', '', $cip);
         $num = preg_replace("/[A-Za-z]+/", '', $cip);
         $nomtabla = $letra . "_" . $num;
@@ -508,6 +525,15 @@ class TablaController extends Controller
         // [0] -> cip
         // [1] -> area
         // [2] -> fecha tabla
+
+        /* Se verifican que todavian hayan datos en cip_n, sino los hay entonces se tiene que enviar a la vista que sta vacio */
+        $verificarDatos = DB::select("select * from cip_01");
+        $verificarDatos  = (array) json_decode(json_encode($verificarDatos), true);
+        if ($verificarDatos == null) {
+            return response()->json(['estado' => 'vacio'], 500);
+        }
+
+
 
         $titulopagina =  $cip . "_" . $fecha;
         $secuencia = $cip . "_secuencia_" . $area;
@@ -522,6 +548,9 @@ class TablaController extends Controller
         foreach ($marcas as $marca) {
             $points[] = ['value' => $marca['inicio'], 'class' => 'black', 'text' => $marca['nombre']];
             $points[] = ['value' => $marca['fin'], 'class' => 'black'];
+
+            $points[] = ['value' => $marca['inicio'], 'class' => 'hora', 'text' => $marca['inicio']];
+            $points[] = ['value' => $marca['fin'], 'class' => 'hora', 'text' => $marca['fin']];
         }
 
         $tipo_cip = $cip . "_tipo_cip_" . $area;
@@ -551,33 +580,106 @@ class TablaController extends Controller
         // Obtniendo las etiquetas para la grafica 1 mostrada en la parte inferior del card
         $etiquetas_grap1 = DB::select("select * from etiquetas_grafica1 where area='$area' and idcip= (select idcip from $nomtabla order by idcip desc limit 1);");
         $etiquetas_grap1 = json_decode(json_encode($etiquetas_grap1), true);
-        //dd($etiquetas_grap1[0]['d1']);
-
-        //Etiquetas que se muestran en la grafica 2
-        $labels_grap2 = [];
-        $labels_grap2[] = ['x' => $etiquetas_grap2[0]['d1'], 'y' => $etiquetas_grap2[0]['d2']];
-        //Etiquetas que se muestran en la grafica 1
-        $labels_grap1 = [];
-        $labels_grap1[] = ['x' => $etiquetas_grap1[0]['d1'], 'y' => $etiquetas_grap1[0]['d2'], 'z' => $etiquetas_grap1[0]['d3']];
 
 
+        //Declarando los arreglos para enviar al graficador en tiempo real de CIP
+        $conductividad_grafica1 = array();
+        $zono_lineas_grafica1 = array();
+        $ozono_hori_grafica1 = array();
+        //--------------------------------
+        $temp_retorno_grafica2 = array();
+        $temp_salida_grafica2 = array();
+        $horas = array();
+
+        //Ingresando el nombre de las etiquetas en el primer indice del arreglo creado
+        array_push($conductividad_grafica1, $etiquetas_grap1[0]["d1"]);
+        array_push($zono_lineas_grafica1, $etiquetas_grap1[0]["d2"]);
+        array_push($ozono_hori_grafica1, $etiquetas_grap1[0]["d3"]);
+        //------------------------------------------------------------------------------------------------
+        array_push($temp_retorno_grafica2, $etiquetas_grap2[0]["d1"]);
+        array_push($temp_salida_grafica2, $etiquetas_grap2[0]["d2"]);
+        array_push($horas, 'x');
+
+        //Ingresando todos los datos obtenidos de la DB hacia el arreglo creado anteriormente
         foreach ($datos as $dato) {
-            $graficar[] = [
-                'horas' => $dato['hora'], $etiquetas_grap2[0]['d1'] => $dato['temp_ret'], $etiquetas_grap2[0]['d2'] => $dato['temp_sal'],
-                $etiquetas_grap1[0]['d1'] => $dato['conductividad'], $etiquetas_grap1[0]['d2'] => $dato['ozono_lineas'], $etiquetas_grap1[0]['d3'] => $dato['ozono_tqs_horizontal']
-            ];
+            array_push($conductividad_grafica1, $dato['conductividad']);
+            array_push($zono_lineas_grafica1, $dato['ozono_lineas']);
+            array_push($ozono_hori_grafica1, $dato['ozono_tqs_horizontal']);
+            array_push($temp_retorno_grafica2, $dato['temp_ret']);
+            array_push($temp_salida_grafica2, $dato['temp_sal']);
         }
 
-        return json_encode([$infos, $datostabla, $graficar, $ejes, $points, $labels_grap2,  $labels_grap1, $titulopagina]);
-        // return view('graficos.cipsTiempoReal', ['graficar' => $graficar, 'ejes' => $ejes, 'points' => $points, 'labels_grap2' => $labels_grap2, 'labels_grap1' => $labels_grap1, 'titulopagina' => $titulopagina]);
+        // 61 datos tiene que haber para que pasen 10 min
+        if (sizeof($datos) <= 61) {
+            $primerhr = DB::select("select cast(t_stamp :: timestamp(0) as time) hora from $nomtabla order by id asc limit 1;");
+            $primerhr = json_decode(json_encode($primerhr), true);
 
-        //return view('graficos.cipsTiempoReal', ['graficar' => $graficar, 'ejes' => $ejes, 'infos' => $infos, 'datostabla' => $datostabla, 'points' => $points, 'labels_grap2' => $labels_grap2, 'labels_grap1' => $labels_grap1, 'titulopagina' => $titulopagina]);
+            $hora_inicial = $primerhr[0]['hora'];
+            array_push($horas, $hora_inicial);
+
+            for ($n = 0; $n < 60; $n++) {
+                $hora_a_sumar = "00:00:10";
+                $h =  strtotime($hora_inicial);
+                $h2 = strtotime($hora_a_sumar);
+                $minuto = date("i", $h2);
+                $segundo = date("s", $h2);
+                $hora = date("H", $h2);
+                $suma = strtotime("+$minuto minutes", $h);
+                $suma = strtotime("+$segundo seconds", $suma);
+                $suma = strtotime("+$hora hours", $suma);
+                $hora_final = date('H:i:s', $suma);
+                $hora_inicial = $hora_final;
+
+                array_push($horas, $hora_final);
+            }
+
+            // 62 sera por defecto los datos de las horas cuando los datos de la base de datos no sean mayor a 10 minutos de curso
+            for ($n = sizeof($conductividad_grafica1); $n <= sizeof($horas); $n++) {
+                array_push($conductividad_grafica1, null);
+                array_push($zono_lineas_grafica1, null);
+                array_push($ozono_hori_grafica1, null);
+                array_push($temp_retorno_grafica2, null);
+                array_push($temp_salida_grafica2, null);
+            }
+        } else {
+            foreach ($datos as $dato) {
+                array_push($horas, $dato['hora']);
+            }
+        }
 
 
+        return json_encode([$infos, $datostabla, $ejes, $points, $titulopagina, $planta, $nomcip, $horas, $conductividad_grafica1, $zono_lineas_grafica1, $ozono_hori_grafica1, $temp_retorno_grafica2, $temp_salida_grafica2]);
     }
+
+
+
 
     public function viewtime($datos)
     {
-        return view('graficos.cipsTiempoReal', ['datos' => $datos]);
+        $separados = explode("=", $datos);
+        $planta = DB::select('select * from nom_planta');
+        $planta = json_decode(json_encode($planta), true);
+        $nomcip = $separados[0];
+
+
+        return view('graficos.cipsTiempoReal', ['datos' => $datos, 'planta' => $planta, 'nomcip' => $nomcip]);
+    }
+
+    public function verificarDatosTiempoReal($dato)
+    {
+        $separados = explode("_", $dato);
+        $fecha = $separados[1];
+        $letra = preg_replace('/[0-9]+/', '',  $separados[0]);
+        $num = preg_replace("/[A-Za-z]+/", '', $separados[0]);
+        $nomtabla = $letra . "_" . $num;
+
+        $tabla = DB::select("select * from  $nomtabla where DATE(t_stamp) ='$fecha'; ");
+        $tabla = json_decode(json_encode($tabla), true);
+
+        if ($tabla != null) {
+            return response()->json(['estado' => 'activo'], 200);
+        } else {
+            return response()->json(['estado' => 'vacio'], 200);
+        }
     }
 }

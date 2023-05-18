@@ -33,32 +33,16 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    <span
+                        style="font-family:Lobster; font-weight: 600; font-size: 18px; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); text-align: center">{{ $planta[0]['nombre'] }}</span>
+                    <span
+                        style="font-family:Lobster; color: rgb(0, 0, 0); text-align: center; font-weight: 600; margin-top:5px;">{{ $planta[0]['sucursal'] }}</span>
+
+                    <br><br>
+
                     <strong style="display: none" id="datos"> {{ $datos }} </strong>
-
-
                     <ul class="list-group" style='font-size: 10px' id="listainfo">
-                        {{--  @foreach ($infos as $info)
-                            <li class="list-group-item p-1"> <strong> Fecha inicio: </strong>
-                                <span>{{ $info['fecha_inicio'] }}</span>
-                            </li>
-                            <li class="list-group-item p-1"> <strong> Fecha final: </strong>
-                                {{ $info['fecha_final'] }}
-                            </li>
-                            <li class="list-group-item p-1"> <strong> Hora inicio: </strong>
-                                {{ $info['hora_inicio'] }}
-                            </li>
-                            <li class="list-group-item p-1"> <strong> Hora final: </strong>
-                                {{ $info['hora_final'] }}
-                            </li>
-                            <li class="list-group-item p-1"> <strong> Duracion: </strong> {{ $info['duracion'] }}
-                            </li>
-                            <li class="list-group-item p-1"> <strong> Tipo de cip: </strong>
-                                {{ $info['tipo_cip'] }}
-                            </li>
-                            <li class="list-group-item p-1"> <strong> Usuario: </strong> {{ $info['usuario'] }}
-                            </li>
-                            <li class="list-group-item p-1"> <strong> Equipo: </strong> {{ $info['equipo'] }} </li>
-                        @endforeach  --}}
+
                     </ul>
                 </div>
                 <br>
@@ -111,8 +95,359 @@
 
 <script>
     $(document).ready(function() {
+        primeraInstancia()
         llamar();
     });
+
+    function cerrar() {
+        window.open('', '_parent', '');
+        window.close();
+    }
+
+    function primeraInstancia() {
+        let datos = document.querySelector("#datos").innerText.trim();
+
+        fetch('/timereal/ ' + datos)
+            .then(response => response.json())
+            .then(respuesta => {
+
+
+                listainfo.innerHTML = ''
+                listainfo.innerHTML += `
+                <li class="list-group-item p-1">
+                    <span><strong> Proceso: </strong></span>
+                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                        <span>{{ $nomcip }}</span>
+                    </div>
+                </li>
+                <li class="list-group-item p-1"> <strong> Fecha inicio: </strong>
+                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                        <span>   ${ respuesta[0][0].fecha_inicio } </span>
+                    </div>
+                </li>
+                <li class="list-group-item p-1"> <strong> Fecha final: </strong>
+                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                        <span> ${ respuesta[0][0].fecha_final }  </span>
+                    </div>
+                </li>
+                <li class="list-group-item p-1"> <strong> Hora inicio: </strong>
+                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                        <span> ${ respuesta[0][0].hora_inicio }  </span>
+                    </div>
+
+                </li>
+                <li class="list-group-item p-1"> <strong> Hora final: </strong>
+                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                        <span> ${ respuesta[0][0].hora_final }</span>
+                    </div>
+                </li>
+                <li class="list-group-item p-1"> <strong> Duracion: </strong>
+                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                        <span> ${ respuesta[0][0].duracion }  </span>
+                    </div>
+                </li>
+                <li class="list-group-item p-1"> <strong> Tipo de cip: </strong>
+                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                        <span>  ${ respuesta[0][0].tipo_cip } </span>
+                    </div>
+                </li>
+                <li class="list-group-item p-1"> <strong> Usuario: </strong>
+                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                        <span> ${ respuesta[0][0].usuario }  </span>
+                    </div>
+
+                </li>
+                <li class="list-group-item p-1"> <strong> Equipo: </strong>
+                    <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                        <span> ${ respuesta[0][0].equipo }  </span>
+                    </div>
+
+                </li>
+                    `;
+
+                datostabla.innerHTML = ''
+                for (let i = 0; i < respuesta[1].length; i++) {
+                    // console.log(respuesta[1][i]);
+                    datostabla.innerHTML += `
+                        <tr>
+                            <td class="p-1">${ respuesta[1][i].nombre }</td>
+                            <td class="p-1">${ respuesta[1][i].inicio }</td>
+                            <td class="p-1">${ respuesta[1][i].fin }</td>
+
+                        </tr>
+                    `;
+                }
+
+                primerGrafica(respuesta);
+                segundaGrafica(respuesta);
+                //console.log(respuesta[3].y);
+
+
+            });
+
+        function primerGrafica(respuesta) {
+            var points = respuesta[3]; // Puntos de las marcas
+            var x = respuesta[2].x; //Etiqueta para el eje x
+            var y = respuesta[2].y2; // Etiqueta para el eje y
+            var horas = respuesta[7]; // Definiendo el rango de horas de la X
+            var conductividad = respuesta[8]; //Priemera pluma de la grafica 1
+            var ozono_lineas = respuesta[9]; //Segunda pluma de la grafica 1
+            var ozono_hori = respuesta[10]; //Tercera pluma de la grafica 1
+
+            var chart = c3.generate({
+
+                bindto: '#chart_conductividad',
+                data: {
+                    x: 'x',
+                    xFormat: '%H:%M:%S',
+                    columns: [horas, conductividad, ozono_lineas, ozono_hori]
+                },
+
+                point: {
+                    r: 0,
+                    //show: false,
+                    focus: {
+                        expand: {
+                            enabled: true,
+                            r: 5
+                        }
+                    },
+                },
+                axis: {
+                    x: {
+
+                        type: 'categories', //timeseries
+                        tick: {
+                            centered: true,
+                            format: '%H:%M:%S',
+                            rotate: 0,
+                            multiline: false,
+                            fit: false, // Los labels se adaptan al ancho de la pantalla
+                            count: 2,
+                            outer: false,
+                        },
+
+                        padding: {
+                            right: 12
+                        },
+
+                        height: 45,
+
+                        label: { // ADD
+                            text: x,
+                            position: 'middle'
+                        }
+                    },
+                    y: {
+                        min: 1,
+                        label: { // ADD
+                            text: y,
+                            position: 'outer-middle'
+                        },
+
+
+                    }
+
+                },
+                grid: {
+                    x: {
+                        //show: true,
+                        lines: points
+
+                        //lines: [{value: 2}, {value: 4, class: 'grid4', text: 'LABEL 4'} ]
+                    },
+                    y: {
+                        //show: true
+                    }
+                },
+
+                onresized: function() {
+
+                    window.innerWidth > 800 ? chart.internal.config.axis_x_tick_culling_max =
+                        8 : chart.internal
+                        .config.axis_x_tick_culling_max = 4;
+                },
+
+                onrendered: function() {
+                    d3.selectAll('.c3-xgrid-line.black').each(function(d, i) {
+                        // cache the group node
+                        var groupNode = d3.select(this).node();
+                        // for each 'text' element within the group
+                        d3.select(this).select('text').each(function(d, i) {
+                            // hide the text to get size o  f group box otherwise text affects size.
+                            d3.select(this).attr("hidden", true);
+                            // use svg getBBox() func to get the group size without the text - want the position
+                            var groupBx = groupNode.getBBox();
+                            d3.select(this)
+                                .attr('transform', null) // remove text rotation
+                                .attr('x', groupBx
+                                    .x) // x-offset from left of chart
+                                .attr('y',
+                                    0) // y-offset of the text from the top of the chart
+                                .attr('dx',
+                                    5) // small x-adjust to clear the line
+                                .attr('dy',
+                                    15) // small y-adjust to get onto the chart
+                                .attr("hidden",
+                                    null) // better make the text visible again
+                                .attr("text-anchor",
+                                    null) // anchor to left by default
+                                .style('fill', 'black'); // color it red for fun
+                        })
+                    })
+
+                    d3.selectAll('.c3-xgrid-line.hora').each(function(d, i) {
+                        var groupNode = d3.select(this).node();
+                        d3.select(this).select('text').each(function(d, i) {
+                            d3.select(this).attr("hidden", true);
+                            var groupBx = groupNode.getBBox();
+                            d3.select(this)
+                                .attr('transform', null)
+                                .attr('x', groupBx.x)
+                                .attr('y', groupBx.height - 18)
+                                .attr('dx', 5)
+                                .attr('dy', 15)
+                                .attr("hidden", null)
+                                .attr("text-anchor", null)
+                                .style('fill', 'black');
+                        })
+                    })
+
+
+                }
+            });
+        }
+
+        function segundaGrafica(respuesta) {
+            var points = respuesta[3]; // Puntos de las marcas
+            var x = respuesta[2].x; //Etiqueta para el eje x
+            var y = respuesta[2].y2; // Etiqueta para el eje y
+            var horas = respuesta[7]; // Definiendo el rango de horas de la X
+            var temp_retorno = respuesta[11]; //Primera pluma de la grafica 2
+            var temp_salida = respuesta[12]; //Segunda pluma de la grafica 2
+
+            var chart = c3.generate({
+
+                bindto: '#dbchart',
+                data: {
+                    x: 'x',
+                    xFormat: '%H:%M:%S',
+                    columns: [horas, temp_retorno, temp_salida]
+
+                },
+                point: {
+                    r: 0,
+                    //show: false,
+                    focus: {
+                        expand: {
+                            enabled: true,
+                            r: 5
+                        }
+                    },
+                },
+                axis: {
+                    x: {
+                        type: 'categories', //timeseries
+                        tick: {
+                            centered: true,
+                            format: '%H:%M:%S',
+                            rotate: 0,
+                            multiline: false,
+                            fit: false, // Los labels se adaptan al ancho de la pantalla
+                            count: 2,
+                            outer: false,
+                        },
+                        padding: {
+                            right: 12
+                        },
+                        height: 45,
+
+                        label: { // ADD
+                            text: x,
+                            position: 'middle'
+                        }
+                    },
+                    reotated: true,
+                    y: {
+                        min: 1,
+                        padding: {
+                            top: 0,
+                            bottom: 0
+                        },
+                        label: { // ADD
+
+                            text: y,
+                            position: 'outer-middle'
+                        },
+                    }
+                },
+                grid: {
+                    x: {
+                        //show: true,
+                        lines: points
+                    },
+                    y: {
+                        //show: true
+                    }
+                },
+
+                onresized: function() {
+
+                    window.innerWidth > 800 ? chart.internal.config.axis_x_tick_culling_max =
+                        8 : chart.internal
+                        .config.axis_x_tick_culling_max = 4;
+                },
+
+                onrendered: function() {
+                    d3.selectAll('.c3-xgrid-line.black').each(function(d, i) {
+                        // cache the group node
+                        var groupNode = d3.select(this).node();
+                        // for each 'text' element within the group
+                        d3.select(this).select('text').each(function(d, i) {
+                            // hide the text to get size o  f group box otherwise text affects size.
+                            d3.select(this).attr("hidden", true);
+                            // use svg getBBox() func to get the group size without the text - want the position
+                            var groupBx = groupNode.getBBox();
+                            d3.select(this)
+                                .attr('transform', null) // remove text rotation
+                                .attr('x', groupBx
+                                    .x) // x-offset from left of chart
+                                .attr('y',
+                                    0) // y-offset of the text from the top of the chart
+                                .attr('dx',
+                                    5) // small x-adjust to clear the line
+                                .attr('dy',
+                                    15) // small y-adjust to get onto the chart
+                                .attr("hidden",
+                                    null) // better make the text visible again
+                                .attr("text-anchor",
+                                    null) // anchor to left by default
+                                .style('fill', 'black'); // color it red for fun
+                        })
+                    })
+
+                    d3.selectAll('.c3-xgrid-line.hora').each(function(d, i) {
+                        var groupNode = d3.select(this).node();
+                        d3.select(this).select('text').each(function(d, i) {
+                            d3.select(this).attr("hidden", true);
+                            var groupBx = groupNode.getBBox();
+                            d3.select(this)
+                                .attr('transform', null)
+                                .attr('x', groupBx.x)
+                                .attr('y', groupBx.height - 18)
+                                .attr('dx', 5)
+                                .attr('dy', 15)
+                                .attr("hidden", null)
+                                .attr("text-anchor", null)
+                                .style('fill', 'black');
+                        })
+                    })
+
+
+                }
+            });
+        }
+    }
 
     function llamar() {
         setInterval(function() {
@@ -124,29 +459,62 @@
                 .then(response => response.json())
                 .then(respuesta => {
 
+                    if (respuesta['estado'] == 'vacio') {
+                        cerrar();
+                    }
+
 
                     listainfo.innerHTML = ''
                     listainfo.innerHTML += `
+                    <li class="list-group-item p-1">
+                        <span><strong> Proceso: </strong></span>
+                        <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                            <span>{{ $nomcip }}</span>
+                        </div>
+                    </li>
                     <li class="list-group-item p-1"> <strong> Fecha inicio: </strong>
-                        <span> ${ respuesta[0][0].fecha_inicio }</span>
+                        <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                            <span>   ${ respuesta[0][0].fecha_inicio } </span>
+                        </div>
                     </li>
                     <li class="list-group-item p-1"> <strong> Fecha final: </strong>
-                        ${ respuesta[0][0].fecha_final }
+                        <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                            <span> ${ respuesta[0][0].fecha_final }  </span>
+                        </div>
                     </li>
                     <li class="list-group-item p-1"> <strong> Hora inicio: </strong>
-                        ${ respuesta[0][0].hora_inicio }
+                        <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                            <span> ${ respuesta[0][0].hora_inicio }  </span>
+                        </div>
+
                     </li>
                     <li class="list-group-item p-1"> <strong> Hora final: </strong>
-                        ${ respuesta[0][0].hora_final }
+                        <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                            <span> ${ respuesta[0][0].hora_final }</span>
+                        </div>
                     </li>
-                    <li class="list-group-item p-1"> <strong> Duracion: </strong> ${ respuesta[0][0].duracion }
+                    <li class="list-group-item p-1"> <strong> Duracion: </strong>
+                        <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                            <span> ${ respuesta[0][0].duracion }  </span>
+                        </div>
                     </li>
                     <li class="list-group-item p-1"> <strong> Tipo de cip: </strong>
-                        ${ respuesta[0][0].tipo_cip }
+                        <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                            <span>  ${ respuesta[0][0].tipo_cip } </span>
+                        </div>
                     </li>
-                    <li class="list-group-item p-1"> <strong> Usuario: </strong> ${ respuesta[0][0].usuario }
+                    <li class="list-group-item p-1"> <strong> Usuario: </strong>
+                        <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                            <span> ${ respuesta[0][0].usuario }  </span>
+                        </div>
+
                     </li>
-                    <li class="list-group-item p-1"> <strong> Equipo: </strong> ${ respuesta[0][0].equipo } </li>
+                    <li class="list-group-item p-1"> <strong> Equipo: </strong>
+                        <div style="width: 100%; margin-top: -15px; margin-left: 80px;">
+                            <span> ${ respuesta[0][0].equipo }  </span>
+                        </div>
+
+                    </li>
                     `;
 
                     datostabla.innerHTML = ''
@@ -170,23 +538,21 @@
                 });
 
             function primerGrafica(respuesta) {
-
-                var puntos = respuesta[2]; // Puntos para graficar
-                var points = respuesta[4]; // Puntos de las marcas
-                var labels = respuesta[6]; // Nombre de las plumas
-                var x = respuesta[3].x; //Etiqueta para el eje x
-                var y = respuesta[3].y2; // Etiqueta para el eje y
-
+                var points = respuesta[3]; // Puntos de las marcas
+                var x = respuesta[2].x; //Etiqueta para el eje x
+                var y = respuesta[2].y2; // Etiqueta para el eje y
+                var horas = respuesta[7]; // Definiendo el rango de horas de la X
+                var conductividad = respuesta[8]; //Priemera pluma de la grafica 1
+                var ozono_lineas = respuesta[9]; //Segunda pluma de la grafica 1
+                var ozono_hori = respuesta[10]; //Tercera pluma de la grafica 1
 
                 var chart = c3.generate({
 
                     bindto: '#chart_conductividad',
                     data: {
-                        json: puntos,
-                        keys: {
-                            x: 'horas',
-                            value: [labels[0].x, labels[0].y, labels[0].z],
-                        }
+                        x: 'x',
+                        xFormat: '%H:%M:%S',
+                        columns: [horas, conductividad, ozono_lineas, ozono_hori]
                     },
 
                     point: {
@@ -204,19 +570,17 @@
 
                             type: 'categories', //timeseries
                             tick: {
-
                                 centered: true,
                                 format: '%H:%M:%S',
                                 rotate: 0,
                                 multiline: false,
-                                fit: true, // Los labels se adaptan al ancho de la pantalla
-                                culling: true,
+                                fit: false, // Los labels se adaptan al ancho de la pantalla
+                                count: 2,
                                 outer: false,
-                                culling: {
-                                    max: window.innerWidth > 800 ? 10 : 4
-                                },
+                            },
 
-
+                            padding: {
+                                right: 12
                             },
 
                             height: 45,
@@ -227,6 +591,7 @@
                             }
                         },
                         y: {
+                            min: 1,
                             label: { // ADD
                                 text: y,
                                 position: 'outer-middle'
@@ -256,22 +621,15 @@
                     },
 
                     onrendered: function() {
-
-                        // for each svg element with the class 'c3-xgrid-line'
-                        d3.selectAll('.c3-xgrid-line').each(function(d, i) {
-
+                        d3.selectAll('.c3-xgrid-line.black').each(function(d, i) {
                             // cache the group node
                             var groupNode = d3.select(this).node();
-
                             // for each 'text' element within the group
                             d3.select(this).select('text').each(function(d, i) {
-
-                                // hide the text to get size of group box otherwise text affects size.
+                                // hide the text to get size o  f group box otherwise text affects size.
                                 d3.select(this).attr("hidden", true);
-
                                 // use svg getBBox() func to get the group size without the text - want the position
                                 var groupBx = groupNode.getBBox();
-
                                 d3.select(this)
                                     .attr('transform', null) // remove text rotation
                                     .attr('x', groupBx
@@ -290,29 +648,45 @@
                                     .style('fill', 'black'); // color it red for fun
                             })
                         })
+
+                        d3.selectAll('.c3-xgrid-line.hora').each(function(d, i) {
+                            var groupNode = d3.select(this).node();
+                            d3.select(this).select('text').each(function(d, i) {
+                                d3.select(this).attr("hidden", true);
+                                var groupBx = groupNode.getBBox();
+                                d3.select(this)
+                                    .attr('transform', null)
+                                    .attr('x', groupBx.x)
+                                    .attr('y', groupBx.height - 18)
+                                    .attr('dx', 5)
+                                    .attr('dy', 15)
+                                    .attr("hidden", null)
+                                    .attr("text-anchor", null)
+                                    .style('fill', 'black');
+                            })
+                        })
+
+
                     }
-
                 });
-
             }
 
             function segundaGrafica(respuesta) {
-
-                var puntos = respuesta[2]; // Puntos para graficar
-                var points = respuesta[4]; // Puntos de las marcas
-                var labels = respuesta[5]; // Nombre de las plumas
-                var x = respuesta[3].x; //Etiqueta para el eje x
-                var y = respuesta[3].y; // Etiqueta para el eje y
+                var points = respuesta[3]; // Puntos de las marcas
+                var x = respuesta[2].x; //Etiqueta para el eje x
+                var y = respuesta[2].y2; // Etiqueta para el eje y
+                var horas = respuesta[7]; // Definiendo el rango de horas de la X
+                var temp_retorno = respuesta[11]; //Primera pluma de la grafica 2
+                var temp_salida = respuesta[12]; //Segunda pluma de la grafica 2
 
                 var chart = c3.generate({
 
                     bindto: '#dbchart',
                     data: {
-                        json: puntos,
-                        keys: {
-                            x: 'horas',
-                            value: [labels[0].x, labels[0].y]
-                        }
+                        x: 'x',
+                        xFormat: '%H:%M:%S',
+                        columns: [horas, temp_retorno, temp_salida]
+
                     },
 
                     point: {
@@ -330,21 +704,17 @@
 
                             type: 'categories', //timeseries
                             tick: {
-
-                                //count:3
                                 centered: true,
                                 format: '%H:%M:%S',
                                 rotate: 0,
                                 multiline: false,
-                                fit: true, // Los labels se adaptan al ancho de la pantalla
-                                culling: true,
+                                fit: false, // Los labels se adaptan al ancho de la pantalla
+                                count: 2,
                                 outer: false,
-                                culling: {
-                                    max: window.innerWidth > 800 ? 10 : 4
-                                },
-
                             },
-
+                            padding: {
+                                right: 12
+                            },
                             height: 45,
 
                             label: { // ADD
@@ -354,7 +724,7 @@
                         },
                         reotated: true,
                         y: {
-
+                            min: 1,
                             padding: {
                                 top: 0,
                                 bottom: 0
@@ -390,22 +760,15 @@
                     },
 
                     onrendered: function() {
-
-                        // for each svg element with the class 'c3-xgrid-line'
-                        d3.selectAll('.c3-xgrid-line').each(function(d, i) {
-
+                        d3.selectAll('.c3-xgrid-line.black').each(function(d, i) {
                             // cache the group node
                             var groupNode = d3.select(this).node();
-
                             // for each 'text' element within the group
                             d3.select(this).select('text').each(function(d, i) {
-
-                                // hide the text to get size of group box otherwise text affects size.
+                                // hide the text to get size o  f group box otherwise text affects size.
                                 d3.select(this).attr("hidden", true);
-
                                 // use svg getBBox() func to get the group size without the text - want the position
                                 var groupBx = groupNode.getBBox();
-
                                 d3.select(this)
                                     .attr('transform', null) // remove text rotation
                                     .attr('x', groupBx
@@ -424,11 +787,30 @@
                                     .style('fill', 'black'); // color it red for fun
                             })
                         })
+
+                        d3.selectAll('.c3-xgrid-line.hora').each(function(d, i) {
+                            var groupNode = d3.select(this).node();
+                            d3.select(this).select('text').each(function(d, i) {
+                                d3.select(this).attr("hidden", true);
+                                var groupBx = groupNode.getBBox();
+                                d3.select(this)
+                                    .attr('transform', null)
+                                    .attr('x', groupBx.x)
+                                    .attr('y', groupBx.height - 18)
+                                    .attr('dx', 5)
+                                    .attr('dy', 15)
+                                    .attr("hidden", null)
+                                    .attr("text-anchor", null)
+                                    .style('fill', 'black');
+                            })
+                        })
+
+
                     }
                 });
             }
 
-        }, 2000)
+        }, 10000)
 
     }
 </script>

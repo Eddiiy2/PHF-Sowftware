@@ -111,6 +111,41 @@
     margin: 0% 0%;
 }
 
+.contenedor-arriba {
+    height: 49%;
+    width: 49%;
+    background-color: #ffffff;
+    margin: 0% 0%;
+}
+
+
+.contenedor-arriba-uno {
+
+    width: 49.5%;
+    display: inline-block;
+    margin: auto;
+    height: 49.5%;
+}
+
+.contenedor-arriba-dos {
+    width: 49.5%;
+    display: inline-block;
+    height: 49.5%;
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.contenedor-tres {
+    border: 1px solid rgb(255, 255, 255);
+    width: 100%;
+    display: inline-block;
+    height: 49.5%;
+    background-color: rgb(255, 255, 255);
+}
+
+
+
+
 
 .contenedor_individual {
     height: 100%;
@@ -162,14 +197,6 @@ h3 {
 }
 
 
-/* modificando el color de las lineas verticales en las graficas */
-
-.c3-xgrid-line.black line {
-    stroke: gray;
-    /*  color de la linea */
-    stroke-dasharray: 5, 5;
-    /*  punteo de la linea */
-}
 
 
 /* Para el calendar del div que no se utilizo */

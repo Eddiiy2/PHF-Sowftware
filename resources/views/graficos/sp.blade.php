@@ -31,49 +31,85 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
+                            <span
+                                style="font-family:Lobster; font-weight: 600; font-size: 18px; background-color: red; color: white; text-align: center">{{ $planta[0]['nombre'] }}</span>
+                            <span
+                                style="font-family:Lobster; color: rgb(0, 0, 0); text-align: center; font-weight: 600; margin-top:5px;">{{ $planta[0]['sucursal'] }}</span>
+                            <br><br>
 
                             <ul class="list-group" style='font-size: 10px'>
+                                <li class="list-group-item p-1">
+
+                                    <span><strong> Proceso: </strong></span>
+                                    <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                        <span>{{ $nomcip }}</span>
+                                    </div>
+
+                                </li>
+
                                 @foreach ($infos as $info)
-                                    <li class="list-group-item p-1"> <strong> Fecha inicio: </strong>
-                                        {{ $info['fecha_inicio'] }}
-                                    </li>
+                                    <li class="list-group-item p-1">
+                                        <strong> Fecha inicio: </strong>
+                                        <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                            <span>{{ $info['fecha_inicio'] }}</span>
+                                        </div>
                                     <li class="list-group-item p-1"> <strong> Fecha final: </strong>
-                                        {{ $info['fecha_final'] }}
+                                        <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                            <span> {{ $info['fecha_final'] }} </span>
+                                        </div>
                                     </li>
                                     <li class="list-group-item p-1"> <strong> Hora inicio: </strong>
-                                        {{ $info['hora_inicio'] }}
+                                        <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                            <span> {{ $info['hora_inicio'] }} </span>
+                                        </div>
                                     </li>
                                     <li class="list-group-item p-1"> <strong> Hora final: </strong>
-                                        {{ $info['hora_final'] }}
+                                        <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                            <span> {{ $info['hora_final'] }} </span>
+                                        </div>
                                     </li>
                                     <li class="list-group-item p-1"> <strong> Duracion: </strong>
-                                        {{ $info['duracion'] }}
+                                        <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                            <span> {{ $info['duracion'] }} </span>
+                                        </div>
                                     </li>
                                     <li class="list-group-item p-1"> <strong> Operación: </strong>
-                                        {{ $info['tipo_cip'] }}
+                                        <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                            <span>{{ $info['tipo_cip'] }}</span>
+                                        </div>
                                     </li>
-                                    <li class="list-group-item p-1"> <strong> Usuario: </strong> {{ $info['usuario'] }}
+                                    <li class="list-group-item p-1"> <strong> Usuario: </strong>
+                                        <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                            <span> {{ $info['usuario'] }} </span>
+                                        </div>
                                     </li>
-                                    <li class="list-group-item p-1"> <strong> Equipo: </strong> {{ $info['equipo'] }}
-                                    </li>
+                                    <li class="list-group-item p-1"> <strong> Equipo: </strong>
+                                        <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                            <span> {{ $info['equipo'] }} </span>
+                                        </div>
 
+                                    </li>
                                     <li class="list-group-item p-1"> <strong> Setpoint agua: </strong>
-                                        {{ $info['agua_sp'] }}
+                                        <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                            <span> {{ $info['agua_sp'] }} </span>
+                                        </div>
                                     </li>
-
                                     <li class="list-group-item p-1"> <strong> Setpoint jarabe simple: </strong>
-                                        {{ $info['js_sp'] }}
+                                        <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                            <span> {{ $info['js_sp'] }} </span>
+                                        </div>
                                     </li>
-
                                     <li class="list-group-item p-1"> <strong> Setpoint fructosa: </strong>
-                                        {{ $info['hfcs_sp'] }}
+                                        <div style="width: 100%; margin-top: -15px; margin-left: 140px;">
+                                            <span> {{ $info['hfcs_sp'] }} </span>
+                                        </div>
                                     </li>
                                 @endforeach
                             </ul>
                         </div>
                         <br>
 
-                        {{--
+
                         <button id="pdf">PDF</button>
                         <button type="button"
                             onclick="printJS({ printable: 'graficas', type: 'html',
@@ -95,7 +131,7 @@
                         }`
                      })">
                             Print Form
-                        </button>  --}}
+                        </button>
 
 
                         <div class="row">
@@ -141,13 +177,15 @@
                         <span> GRAFICAS </span>
                     </div>
                     <div class="card-body" id="card-graficas">
+                        <div class="contenedor-arriba-uno" id="chart_agua"> </div>
+                        <div class="contenedor-arriba-dos" id="fqa"></div>
 
                         <?php if ($sp == 'sp03') { ?>
-                        <div class="contenedor_individual" id="chart_agua"> </div>
+                        <div class="contenedor-tres" id="dbchart" style="pointer-events: none; opacity: 0.4;"></div>
                         <?php } else { ?>
-                        <div class="contenedor" id="chart_agua"> </div>
-                        <div class="contenedor" id="dbchart"></div>
+                        <div class="contenedor-tres" id="dbchart"></div>
                         <?php } ?>
+
 
                     </div>
                 </div>
@@ -155,6 +193,13 @@
         </div>
     </body>
 
+    {{--  <script>
+        var $chartContainer = $('.c3');
+        var $lastTick = $chartContainer.find('.c3-axis.c3-axis-x .tick').last();
+        var translateValue = parseInt($lastTick.attr('transform').replace('translate(', ''), 10);
+        var tickWidth = $lastTick[0].getBoundingClientRect().width / 2;
+        $lastTick.attr('transform', 'translate(' + (translateValue - tickWidth) + ',0)');
+    </script>  --}}
 
     <script>
         var puntos = JSON.parse('{!! json_encode($graficar) !!}');
@@ -188,29 +233,29 @@
 
                     type: 'categories', //timeseries
                     tick: {
-
                         centered: true,
                         format: '%H:%M:%S',
                         rotate: 0,
                         multiline: false,
-                        fit: true, // Los labels se adaptan al ancho de la pantalla
-                        culling: true,
+                        fit: false, // Los labels se adaptan al ancho de la pantalla
+                        count: 2,
                         outer: false,
-                        culling: {
-                            max: window.innerWidth > 800 ? 10 : 4
-                        },
-
-
                     },
-
                     height: 45,
 
+                    padding: {
+                        right: 20
+                    },
                     label: { // ADD
                         text: "{!! $ejes['x'] !!}",
                         position: 'middle'
                     }
                 },
                 y: {
+                    min: 1,
+                    padding: {
+                        bottom: 0
+                    },
                     label: { // ADD
                         text: "{!! $ejes['y'] !!}",
                         position: 'outer-middle'
@@ -231,43 +276,6 @@
                     //show: true
                 }
             },
-
-            onresized: function() {
-
-                window.innerWidth > 800 ? chart.internal.config.axis_x_tick_culling_max = 8 : chart.internal
-                    .config.axis_x_tick_culling_max = 4;
-            },
-
-            onrendered: function() {
-
-                // for each svg element with the class 'c3-xgrid-line'
-                d3.selectAll('.c3-xgrid-line').each(function(d, i) {
-
-                    // cache the group node
-                    var groupNode = d3.select(this).node();
-
-                    // for each 'text' element within the group
-                    d3.select(this).select('text').each(function(d, i) {
-
-                        // hide the text to get size of group box otherwise text affects size.
-                        d3.select(this).attr("hidden", true);
-
-                        // use svg getBBox() func to get the group size without the text - want the position
-                        var groupBx = groupNode.getBBox();
-
-                        d3.select(this)
-                            .attr('transform', null) // remove text rotation
-                            .attr('x', groupBx.x) // x-offset from left of chart
-                            .attr('y', 0) // y-offset of the text from the top of the chart
-                            .attr('dx', 5) // small x-adjust to clear the line
-                            .attr('dy', 15) // small y-adjust to get onto the chart
-                            .attr("hidden", null) // better make the text visible again
-                            .attr("text-anchor", null) // anchor to left by default
-                            .style('fill', 'black'); // color it red for fun
-                    })
-                })
-            }
-
         });
     </script>
 
@@ -278,12 +286,12 @@
 
         var chart = c3.generate({
 
-            bindto: '#dbchart',
+            bindto: '#fqa',
             data: {
                 json: puntos,
                 keys: {
                     x: 'horas',
-                    value: [labels.x, labels.y, labels.z],
+                    value: ["Cloro", "Conductividad", "Velocidad", "Ph", "Lote", "Propiedades PSQA"],
                 }
             },
 
@@ -299,91 +307,115 @@
             },
             axis: {
                 x: {
-
                     type: 'categories', //timeseries
                     tick: {
-
                         centered: true,
                         format: '%H:%M:%S',
                         rotate: 0,
                         multiline: false,
-                        fit: true, // Los labels se adaptan al ancho de la pantalla
-                        culling: true,
+                        fit: false, // Los labels se adaptan al ancho de la pantalla
+                        count: 2,
                         outer: false,
-                        culling: {
-                            max: window.innerWidth > 800 ? 10 : 4
-                        },
-
-
                     },
-
                     height: 45,
+                    padding: {
+                        right: 20
+                    },
+                    label: { // ADD
+                        text: "",
+                        position: 'middle'
+                    },
+                    show: true
+                },
+                y: {
+                    min: 1,
+                    padding: {
+                        bottom: 0
+                    },
+                    label: { // ADD
+                        text: "",
+                        position: 'outer-middle'
+                    },
+                }
+            },
+            grid: {
+                x: {
+                    lines: points
+                },
+                y: {
+                    //show: true
+                }
+            },
+        });
+    </script>
 
+    <script>
+        var puntos = JSON.parse('{!! json_encode($graficar) !!}');
+        var points = JSON.parse('{!! json_encode($points) !!}');
+        var labels = JSON.parse('{!! json_encode($labels_grap2) !!}');
+
+        var chart = c3.generate({
+            bindto: '#dbchart',
+            data: {
+                json: puntos,
+                keys: {
+                    x: 'horas',
+                    value: [labels.x, labels.y, labels.z],
+                }
+            },
+            point: {
+                r: 0,
+                //show: false,
+                focus: {
+                    expand: {
+                        enabled: true,
+                        r: 5
+                    }
+                },
+            },
+            axis: {
+                x: {
+                    type: 'categories', //timeseries
+                    tick: {
+                        centered: true,
+                        format: '%H:%M:%S',
+                        rotate: 0,
+                        multiline: false,
+                        fit: false, // Los labels se adaptan al ancho de la pantalla
+                        count: 2,
+                        outer: false,
+                    },
+                    height: 45,
+                    padding: {
+                        right: 20
+                    },
                     label: { // ADD
                         text: "{!! $ejes['x'] !!}",
                         position: 'middle'
                     }
                 },
                 y: {
+                    min: 1,
+                    padding: {
+                        bottom: 0
+                    },
                     label: { // ADD
                         text: "{!! $ejes['y2'] !!}",
                         position: 'outer-middle'
                     },
-
-
                 }
-
             },
             grid: {
                 x: {
-                    //show: true,
                     lines: points
-
-                    //lines: [{value: 2}, {value: 4, class: 'grid4', text: 'LABEL 4'} ]
                 },
                 y: {
                     //show: true
                 }
             },
-
-            onresized: function() {
-
-                window.innerWidth > 800 ? chart.internal.config.axis_x_tick_culling_max = 8 : chart.internal
-                    .config.axis_x_tick_culling_max = 4;
-            },
-
-            onrendered: function() {
-
-                // for each svg element with the class 'c3-xgrid-line'
-                d3.selectAll('.c3-xgrid-line').each(function(d, i) {
-
-                    // cache the group node
-                    var groupNode = d3.select(this).node();
-
-                    // for each 'text' element within the group
-                    d3.select(this).select('text').each(function(d, i) {
-
-                        // hide the text to get size of group box otherwise text affects size.
-                        d3.select(this).attr("hidden", true);
-
-                        // use svg getBBox() func to get the group size without the text - want the position
-                        var groupBx = groupNode.getBBox();
-
-                        d3.select(this)
-                            .attr('transform', null) // remove text rotation
-                            .attr('x', groupBx.x) // x-offset from left of chart
-                            .attr('y', 0) // y-offset of the text from the top of the chart
-                            .attr('dx', 5) // small x-adjust to clear the line
-                            .attr('dy', 15) // small y-adjust to get onto the chart
-                            .attr("hidden", null) // better make the text visible again
-                            .attr("text-anchor", null) // anchor to left by default
-                            .style('fill', 'black'); // color it red for fun
-                    })
-                })
-            }
-
         });
     </script>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.js"
         integrity="sha512-Fd3EQng6gZYBGzHbKd52pV76dXZZravPY7lxfg01nPx5mdekqS8kX4o1NfTtWiHqQyKhEGaReSf4BrtfKc+D5w=="
