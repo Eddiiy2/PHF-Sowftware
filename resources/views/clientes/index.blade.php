@@ -5,8 +5,8 @@
             <div id="seleccionGraficas" class="card flex-fill w-100  h-100">
                 <div class="card-body">
                     <h5 style='font-size: 30px; color:black;'><strong> {{ $nomarea }} </strong></h5>
-                    <strong style="display: none" id="area"> {{ $area }} </strong>
-                    <strong style="display: none" id="nombre_real"></strong>
+                    <strong style="display" id="area"> {{ $area }} </strong>
+                    <strong style="display" id="nombre_real"></strong>
                     <br>
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="inputGroupSelect01"> <strong> NOMBRE </strong></label>
@@ -15,7 +15,9 @@
                             @foreach ($cips as $cip)
                                 {{--  disabled selected  --}}
                                 <option> {{ $cip['nombre'] }} </option>
+
                             @endforeach
+
                             {{--  <option>Todos</option>  --}}
 
                         </select>
@@ -110,15 +112,17 @@
         function llamar() {
             setInterval(function() {
                 var nomcip = document.getElementById("cip").value;
-                let area = document.querySelector("#area").innerText.trim();
 
+                //console.log(nomcip);
+                let area = document.querySelector("#area").innerText.trim();
+                //console.log(area);
                 var today = new Date();
                 var day = today.getDate();
                 var month = today.getMonth() + 1;
                 var year = today.getFullYear();
                 const dia = `${year}-${month}-${day}`;
-
-
+                var esta = nomcip + "_" + area;
+                console.log(esta);
                 fetch('/idcip/' + nomcip + "_" + area)
                     .then(response => response.json())
                     .then(respuesta => {
@@ -128,6 +132,7 @@
                     });
             }, 1000);
         }
+
 
         function verificador(datos) {
             fetch('/verificarDatosTiempoReal/' + datos)
@@ -156,7 +161,6 @@
     {{--  Metodo para enviar a la ventana de tiempo real dando click en el boton   --}}
     <script>
         function timereal() {
-
 
             var nomcip = document.getElementById("cip").value;
             let area = document.querySelector("#area").innerText.trim();

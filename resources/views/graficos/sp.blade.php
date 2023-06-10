@@ -203,7 +203,9 @@
 
     <script>
         var puntos = JSON.parse('{!! json_encode($graficar) !!}');
+
         var points = JSON.parse('{!! json_encode($points) !!}');
+        //console.log(points);
         var labels = JSON.parse('{!! json_encode($labels_grap1) !!}');
 
         var chart = c3.generate({
@@ -281,8 +283,10 @@
 
     <script>
         var puntos = JSON.parse('{!! json_encode($graficar) !!}');
+
         var points = JSON.parse('{!! json_encode($points) !!}');
         var labels = JSON.parse('{!! json_encode($labels_grap2) !!}');
+        //console.log(labels);
 
         var chart = c3.generate({
 
@@ -353,6 +357,7 @@
         var puntos = JSON.parse('{!! json_encode($graficar) !!}');
         var points = JSON.parse('{!! json_encode($points) !!}');
         var labels = JSON.parse('{!! json_encode($labels_grap2) !!}');
+        //console.log(labels);
 
         var chart = c3.generate({
             bindto: '#dbchart',

@@ -41,6 +41,10 @@ Route::get('/idcip/{n}', [TablaController::class, 'consultaridcip']);
 Route::get('/timerealview/{datos}', [TablaController::class, 'viewtime']);
 Route::get('/timereal/{datos}', [TablaController::class, 'indextime']);
 Route::get('/verificarDatosTiempoReal/{datos}', [TablaController::class, 'verificarDatosTiempoReal']);
+//NUEVA RUTAS PARA SISTEMA DE PREPARACION SP EN TIEMPO REAL
+Route::get('/tiempoSp/{datos}', [TablaController::class, 'indexrealSp']); //VISTA
+
+
 
 // Rutas para el login, el validado de usuarios y la salida de usuarios
 Route::get('/login', [EntradaController::class, 'login'])->name('entrada');
@@ -51,3 +55,7 @@ Route::get('/blog', [TablaController::class, 'index']);
 Route::get('/phfsoftware', [TablaController::class, 'bienvenida']); // Vista para la entrada del programa (Bienvenida)
 Route::get('/principal/{nom}', [TablaController::class, 'principal']); // Metodo para obtener los nom de los cips mediante ajax
 Route::get('/obtenerdivs', [TablaController::class, 'obtenerdivs']); // Ruta para el metodo donde retorna la cantidad de divs a mostrar en el navbar mediante peticion ajax
+
+
+
+

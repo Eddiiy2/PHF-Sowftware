@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="{{ asset('css/c3.css') }}">
     <link rel="stylesheet" href="{{ asset('css/all.css') }}">
 
-
     {{--  Importando js de C3 para las graficas y Ajax para la consulta de la tabla index  --}}
     <script src="{{ URL::asset('js/c3.js') }}"></script>
     <script src="{{ URL::asset('js/d3-v5-min.js') }}"></script>
@@ -22,7 +21,6 @@
     <script src="{{ URL::asset('js/all.js') }}"></script>
 
     {{--  -----------------------------------------------------------------------  --}}
-
 
 
 </head>
